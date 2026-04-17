@@ -1,0 +1,3197 @@
+<!DOCTYPE html>
+<!-- saved from url=(0251)https://storage.abby.abb.com/elabbyinternalassistant/conversations/78926584-7d0c-4d12-9e5a-b27a6df2f02d/output/Downtime_Cost_Calculator_READY.html?se=2026-02-20T21%3A46%3A49Z&sp=r&sv=2025-07-05&sr=b&sig=XrOr1N4JwaMwNZOfooyqaceiLVxED%2BerZFJye3cOLW0%3D -->
+<html dir="ltr" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Downtime Business Assessment Tool</title>
+<style>
+
+/* ===============================
+   ABB Corporate Font – ABB Voice
+   =============================== */
+
+.abb-logo-link { gap: 10px; } /* keeps logo + slogan nicely spaced */
+.abb-slogan{
+  font-weight: 700;
+  font-size: 14px;
+  color: #111827;
+  white-space: nowrap;
+}
+
+
+@font-face {
+  font-family: 'ABB Voice';
+  src: url('assets/fonts/ABBvoice.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ABB Voice';
+  src: url('assets/fonts/ABBvoice.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ABB Voice';
+  src: url('assets/fonts/ABBvoice.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ABB Voice Display';
+  src: url('assets/fonts/ABBvoice.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+
+
+.report-header{
+  padding:20px;
+  border-bottom:3px solid #ff000f;
+  margin-bottom:20px;
+  background:white;
+}
+
+.report-header h2{
+  margin-bottom:12px;
+  font-weight:900;
+}
+
+.report-client{
+  display:grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:8px;
+  font-size:14px;
+}
+
+
+body{
+  font-family: 'ABB Voice', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+}
+
+    :root{
+      --abb-red:#ff000f;
+      --abb-red-dark:#cc000c;
+
+      --accent:#6764f6;
+
+      --ink:#111827;
+      --muted:#6b7280;
+      --bg:#f5f7fa;
+      --line:#e5e7eb;
+      --soft:#f3f4f6;
+      --shadow:0 10px 28px rgba(0,0,0,.08);
+      --radius:14px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --bad:#dc2626;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+  font-family: 'ABB Voice', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+    /* Header */
+    .abb-header{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      position:sticky; top:0; z-index:1000;
+      padding:14px 22px;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+    }
+    .abb-header-right{
+      display:flex; gap:12px; align-items:center;
+    }
+
+    .abb-logo{height:32px;width:auto;display:block;object-fit:contain;}
+    .back-button{
+      background:var(--abb-red);
+      color:#fff;
+      padding:10px 16px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:800;
+      font-size:14px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s ease;
+      white-space:nowrap;
+    }
+    .back-button:hover{background:var(--abb-red-dark);transform:translateY(-1px);}
+
+    /* Language toggle */
+    .lang-toggle{
+      background:#111827;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      border:none;
+      font-weight:950;
+      font-size:13px;
+      cursor:pointer;
+      transition:.2s ease;
+      white-space:nowrap;
+      opacity:.92;
+    }
+    .lang-toggle:hover{opacity:1;transform:translateY(-1px);}
+
+    /* Shell */
+    .page{max-width:1240px;margin:20px auto 40px;padding:0 14px;}
+    .shell{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    /* Hero */
+    .hero{
+      padding:22px 22px 16px;
+      border-bottom:1px solid var(--line);
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(255,0,15,.10) 0%, rgba(255,0,15,0) 60%),
+        radial-gradient(900px 220px at 90% 0%, rgba(255,0,15,.08) 0%, rgba(255,0,15,0) 60%),
+        #fff;
+    }
+    .hero h1{
+      font-size:clamp(22px,2.1vw,32px);
+      letter-spacing:.01em;
+      margin-bottom:8px;
+    }
+    .hero p{color:var(--muted);line-height:1.6;max-width:90ch;}
+
+    /* Two-column grid for inputs + outputs */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+      padding:16px;
+      background:#fff;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      overflow:hidden;
+    }
+    .panel-head{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background:#fff;
+    }
+    .panel-head h2{font-size:14px;}
+    .pill{
+      font-size:12px;
+      font-weight:950;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--soft);
+      color:#374151;
+      white-space:nowrap;
+    }
+    .pill.required{background:rgba(255,0,15,.08);color:var(--abb-red);}
+    .panel-body{padding:14px 16px;}
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 0 12px;
+      border-bottom:1px solid var(--line);
+      margin-bottom:14px;
+    }
+    .section-title h3{font-size:14px;}
+
+    /* Inputs */
+    .input-group{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+    label{
+      font-size:13px;
+      font-weight:900;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .req{color:var(--abb-red);font-weight:950;}
+
+    input,select{
+      padding:12px 12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+      transition:.15s ease;
+    }
+    input:focus,select:focus{
+      border-color:rgba(255,0,15,.55);
+      box-shadow:0 0 0 4px rgba(255,0,15,.10);
+    }
+    small{color:var(--muted);font-size:12px;line-height:1.45;}
+
+    /* Helper box (keep ONLY 3 lines) */
+    .helper{
+      background:#fbfbfc;
+      border:1px solid var(--line);
+      border-left:4px solid var(--abb-red);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:12.5px;
+      line-height:1.55;
+      color:#374151;
+    }
+    .helper strong{color:#111827;}
+
+    /* Alerts */
+    .alert{
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:12.5px;
+      line-height:1.55;
+      border:1px solid var(--line);
+      background:#fff;
+      margin: 6px 0 14px;
+    }
+    .alert.warn{border-left:4px solid var(--warn);background: rgba(245, 158, 11, .08);}
+    .alert.error{border-left:4px solid var(--abb-red);background: rgba(255, 0, 15, .08);}
+
+    /* Buttons */
+    .button-row{display:flex;gap:12px;margin-top:10px;}
+    .btn{
+      flex:1;
+      border:none;
+      border-radius:999px;
+      padding:12px 16px;
+      font-weight:950;
+      font-size:14px;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .btn.primary{
+      background:var(--abb-red);
+      color:#fff;
+      box-shadow:0 10px 18px rgba(255,0,15,.18);
+    }
+    .btn.primary:hover{background:var(--abb-red-dark);transform:translateY(-1px);}
+    .btn.primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none;}
+    .btn.secondary{background:#111827;color:#fff;opacity:.92;}
+    .btn.secondary:hover{opacity:1;transform:translateY(-1px);}
+
+    /* Results */
+    .placeholder{
+      border:1px dashed #cbd5e1;
+      background:#fbfbfc;
+      border-radius:var(--radius);
+      padding:18px;
+      text-align:center;
+      color:var(--muted);
+    }
+    .placeholder h3{font-size:15px;color:#111827;margin-bottom:6px;}
+    .placeholder p{font-size:13px;line-height:1.6;}
+
+    .result-block{margin-top:14px;}
+    .result-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin:12px 0 10px;
+    }
+    .result-title h3{font-size:14px;}
+
+    .metric{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+    .metric .kpi-label{font-size:12px;color:var(--muted);font-weight:950;margin-bottom:6px;}
+    .metric .kpi-value{font-size:26px;font-weight:980;letter-spacing:.01em;}
+    .metric .kpi-value.red{color:var(--abb-red);}
+
+    /* Output def box: EXACT 3 lines */
+    .outdef{
+      margin-top:10px;
+      background:#fbfbfc;
+      border:1px solid var(--line);
+      border-left:4px solid #111827;
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:12.5px;
+      line-height:1.55;
+      color:#374151;
+    }
+    .outdef strong{color:#111827;}
+
+    .hidden{display:none!important;}
+
+    /* FULL-WIDTH sections under the grid */
+    .full-width{
+      padding:0 16px 16px;
+      background:#fff;
+    }
+
+    /* Executive Summary - full width */
+    .exec-wrap{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .exec-head{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:16px;
+      border-bottom:1px solid var(--line);
+      color:var(--accent);
+      font-weight:980;
+      font-size:22px;
+    }
+    .exec-body{
+      padding:16px;
+      border-left:4px solid var(--accent);
+    }
+    .exec-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:16px;
+      align-items:stretch;
+    }
+    .exec-card{
+      border:1px solid #eef0ff;
+      background:#fff;
+      border-radius:12px;
+      padding:16px;
+      border-left:4px solid var(--accent);
+      min-height:110px;
+    }
+    .exec-card h4{
+      color:var(--accent);
+      font-size:18px;
+      margin-bottom:10px;
+      font-weight:980;
+    }
+    .exec-card p{
+      color:#374151;
+      line-height:1.8;
+      font-size:15px;
+      font-weight:800;
+    }
+
+    /* Disclaimer (darker grey) */
+    .exec-disclaimer{
+      margin-top:10px;
+      font-size:10px;
+      line-height:1.35;
+      color:#374151;
+    }
+
+    /* Recommendations - full width */
+    .rec-wrap{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      overflow:hidden;
+      margin-top:12px;
+    }
+    .rec-head{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:16px;
+      border-bottom:1px solid rgba(255,0,15,.18);
+      color:var(--abb-red);
+      font-weight:980;
+      font-size:22px;
+    }
+    .rec-body{
+      padding:16px;
+      display:grid;
+      grid-template-columns: 1.4fr .6fr;
+      gap:14px;
+    }
+    .rec-card{
+      background:#fff;
+      border:1px solid rgba(255,0,15,.20);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+    .rec-card h4{
+      font-size:15px;
+      margin-bottom:8px;
+      color:#111827;
+      font-weight:950;
+    }
+    .rec-card p{
+      color:#374151;
+      line-height:1.7;
+      font-size:13.5px;
+    }
+    .rec-kpi{font-weight:980;color:#111827;}
+
+    .cta{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid rgba(255,0,15,.22);
+      background:
+      radial-gradient(700px 180px at 20% 0%, rgba(255,0,15,.10) 0%, rgba(255,0,15,0) 60%),
+      #fff;
+      height:auto;
+   }
+   .cta p{
+     font-size:14px;
+     line-height:1.55;
+     color:#111827;
+     font-weight:800;
+     margin:0;
+   }
+
+     /* تحسين tip النص الصغير */
+  .cta p[style*="font-size:12px"]{
+    color:#6b7280 !important;
+    font-size:12.5px !important;
+    line-height:1.5 !important;
+    margin-top:2px !important;
+    text-decoration:none !important;
+   }
+
+    .cta a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+
+      width:fit-content;
+      max-width:100%;
+      padding:12px 18px;
+
+      background:var(--abb-red);
+      color:#fff;
+      text-decoration:none;
+      font-weight:980;
+      font-size:14px;
+
+      border-radius:999px;
+      box-shadow:0 12px 22px rgba(255,0,15,.22);
+      align-self:flex-start;
+   }
+   .cta a:hover{
+     background:var(--abb-red-dark);
+     transform:translateY(-1px);
+   }
+
+    /* Footer */
+    .footer{
+      margin:16px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px 16px;
+      background:#fff;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.6;
+    }
+    .footer strong{color:#111827;}
+
+    /* RTL switching (UI only; values untouched) */
+    html[dir="rtl"] body{direction:rtl;}
+    html[dir="rtl"] .abb-header{flex-direction:row-reverse;}
+    html[dir="rtl"] .abb-header-right{flex-direction:row-reverse;}
+    html[dir="rtl"] input,
+    html[dir="rtl"] select{
+      text-align:right;
+    }
+
+    /* Keep numbers/currency/units visually LTR in RTL */
+    .num-ltr{direction:ltr; unicode-bidi:plaintext;}
+
+
+  @media (max-width: 1024px){
+    .grid{grid-template-columns:1fr;}
+    .exec-grid{grid-template-columns:1fr;}
+    .rec-body{grid-template-columns:1fr;}
+    .abb-header{flex-direction:column;align-items:flex-start;}
+    .abb-header-right{
+            width:100%;
+            flex-direction: column;
+            align-items: stretch;
+   }      
+    .back-button{width:100%;justify-content:center;}
+    .lang-toggle{width:100%;}
+}
+
+
+.abb-logo-link{
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  text-decoration: none;
+  position: relative;
+  z-index: 3000;   /* أعلى من الهيدر */
+  pointer-events: auto;
+}
+
+.abb-logo{
+  display: block;
+  height: 36px;   /* أو 42px لو تحب */
+  width: auto;
+  pointer-events: none; /* الضغط يروح للـ <a> */
+}
+
+/* ========================= PRINT / SAVE AS PDF ========================= */
+
+
+  
+    /* PDF export mode (used by jsPDF/html2canvas clone) */
+    .pdf-mode{
+      font-size: 16px;
+    }
+    .pdf-mode .grid{
+      grid-template-columns: 1fr !important;
+    }
+    .pdf-mode .panel{
+      border: 1px solid var(--line);
+    }
+    .pdf-mode .panel-body{
+      padding: 18px;
+    }
+    .pdf-mode .kpi-value{
+      font-size: 26px;
+      line-height: 1.1;
+    }
+    .pdf-mode .kpi-label{
+      font-size: 13px;
+    }
+    .pdf-mode .outdef{
+      font-size: 13.5px;
+    }
+    .pdf-mode .result-title h3{
+      font-size: 18px;
+    }
+    .pdf-mode #exportWrap{
+      display:none !important; /* never show export button inside PDF clone */
+    }
+
+</style>
+<!-- PDF generation libraries (for Export to PDF) -->
+<!-- Pardot tracking removed for standalone version -->
+
+<!-- Analytics removed for standalone version --><!-- PDF Libraries from CDN -->
+<!-- PDF Libraries - Lazy loaded from CDN when Export PDF is clicked -->
+<script>
+  var pdfLibsLoaded = false;
+  function loadPdfLibs(callback) {
+    if (pdfLibsLoaded) { callback(); return; }
+    var s1 = document.createElement('script');
+    s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s1.onload = function() {
+      var s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      s2.onload = function() { pdfLibsLoaded = true; callback(); };
+      s2.onerror = function() { alert('Failed to load PDF library. Check internet connection.'); };
+      document.head.appendChild(s2);
+    };
+    s1.onerror = function() { alert('Failed to load PDF library. Check internet connection.'); };
+    document.head.appendChild(s1);
+  }
+</script>
+<!-- Local vendor libraries (production) -->
+<script src="assets/js/vendor/html2canvas.min.js"></script>
+<script src="assets/js/vendor/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+<div class="abb-header">
+<a class="abb-logo-link" ...="">
+  <img class="abb-logo" src="assets/images/abb-logo.png" alt="ABB">
+  
+</a>
+
+<div class="abb-header-right">
+<a class="back-button" data-i18n="backBtn" href="https://campaign-el.abb.com/l/961032/2026-02-06/7sblf" target="_blank">← Contact us for more information</a>
+<button aria-label="Switch language" class="lang-toggle" id="langToggle" type="button">AR</button>
+</div>
+</div>
+<div class="page">
+<div class="shell">
+<div class="report-header hidden" id="reportHeader">
+<h2> Downtime &amp; Reliability Business Assessment Report</h2>
+<div class="report-client">
+<div><strong>Company:</strong> <span id="repCompany">asdasd</span></div>
+<div><strong>Contact:</strong> <span id="repContact">asdasd</span></div>
+<div><strong>Email:</strong> <span id="repEmail">asdads@gmail.com</span></div>
+<div><strong>Date:</strong> <span id="repDate">2/20/2026</span></div>
+</div>
+</div>
+<div class="hero">
+<h1 data-i18n="title">Downtime Business Assessment Tool</h1>
+<p data-i18n="subtitle">Discover the true cost of downtime, measure your equipment reliability, and uncover your savings potential.</p>
+</div>
+<div class="grid">
+<!-- INPUT -->
+<div class="panel">
+<div class="panel-head">
+<h2 data-i18n="inputInfo">Input Information</h2>
+</div>
+<div class="panel-body">
+<div class="section-title">
+<h3 data-i18n="companyInfo">Company Information</h3>
+</div>
+<div class="input-group">
+<label for="companyName">
+<span data-i18n="companyNameLabel">Company Name</span>
+</label>
+<input data-i18n-placeholder="phCompany" id="companyName" placeholder="Enter company name" type="text">
+</div>
+<div class="input-group">
+<label for="userTitle">
+<span data-i18n="userTitleLabel">Your Title</span>
+</label>
+<input data-i18n-placeholder="phTitle" id="userTitle" placeholder="e.g., Maintenance Manager" type="text">
+</div>
+<div class="input-group">
+<label for="userEmail">
+<span data-i18n="userEmailLabel">Email</span>
+</label>
+<input data-i18n-placeholder="phEmail" id="userEmail" placeholder="your.email@company.com" type="email">
+</div>
+<div class="input-group">
+<label data-i18n="currencyLabel" for="currency">Currency</label>
+<select id="currency">
+<option data-i18n="curEGP" value="EGP">EGP - Egyptian Pound</option>
+<option data-i18n="curUSD" value="USD">USD - US Dollar</option>
+<option data-i18n="curSAR" value="SAR">SAR - Saudi Riyal</option>
+<option data-i18n="curAED" value="AED">AED - UAE Dirham</option>
+<option data-i18n="curEUR" value="EUR">EUR - Euro</option>
+</select>
+</div>
+<!-- Industry Selector for Benchmarking -->
+<div class="input-group">
+<label for="industry">
+<span data-i18n="industryLabel">Industry Sector</span>
+</label>
+<select id="industry">
+<option data-i18n="indGeneral" value="general">Select your industry</option>
+<option data-i18n="indOilGas" value="oil_gas">Oil &amp; Gas</option>
+<option data-i18n="indChemical" value="chemical">Chemical Processing</option>
+<option data-i18n="indManufacturing" value="manufacturing">Manufacturing (General)</option>
+<option data-i18n="indPower" value="power">Utilities (Power)</option>
+<option data-i18n="indDatacenter" value="datacenter">Data Centers</option>
+<option data-i18n="indHotel" value="hotel">Hotels &amp; Hospitality</option>
+<option data-i18n="indBank" value="bank">Banks &amp; Financial Services</option>
+<option data-i18n="indMining" value="mining">Mining</option>
+<option data-i18n="indCement" value="cement">Cement</option>
+<option data-i18n="indSteel" value="steel">Steel</option>
+<option data-i18n="indGlass" value="glass">Glass</option>
+<option data-i18n="indFood" value="food">Food &amp; Beverage</option>
+<option data-i18n="indAutomotive" value="automotive">Automotive Assembly</option>
+<option data-i18n="indPharma" value="pharma">Pharmaceutical</option>
+<option data-i18n="indPaper" value="paper">Paper &amp; Pulp</option>
+<option data-i18n="indPetrochem" value="petrochem">Petrochemical</option>
+</select>
+</div>
+
+
+<div class="section-title" style="margin-top:6px;">
+  <h3 data-i18n="equipDetailsTitle">Equipment Details</h3>
+  <span class="pill required" data-i18n="required">Required</span>
+</div>
+
+<div class="input-group">
+  <label for="equipmentType">
+    <span data-i18n="equipmentTypeLabel">Equipment Type</span> <span class="req">*</span>
+  </label>
+  <select id="equipmentType">
+    <option value="" selected="" data-i18n="equipmentTypePH">Select equipment type</option>
+    <option value="general" data-i18n="equipmentType_general">General Industry</option>
+    <option value="mv_swg" data-i18n="equipmentType_mv_swg">MV Switchgear (1kV - 36kV)</option>
+    <option value="lv_swg" data-i18n="equipmentType_lv_swg">LV Switchgear (&lt; 1kV)</option>
+    <option value="mv_lv" data-i18n="equipmentType_mv_lv">MV/LV Combined</option>
+  </select>
+</div>
+
+<div class="input-group">
+  <label for="equipmentAge">
+    <span data-i18n="equipmentAgeLabel">Equipment Age</span> <span class="req">*</span>
+  </label>
+  <select id="equipmentAge">
+    <option value="" selected="" data-i18n="equipmentAgePH">Select equipment age</option>
+    <option value="new" data-i18n="equipmentAge_new">&lt; 5 years (New)</option>
+    <option value="mid" data-i18n="equipmentAge_mid">5-15 years (Mid-life)</option>
+    <option value="aging" data-i18n="equipmentAge_aging">15-25 years (Aging)</option>
+    <option value="end" data-i18n="equipmentAge_end">&gt; 25 years (End-of-life)</option>
+  </select>
+</div>
+
+<div class="input-group">
+  <label for="environment">
+    <span data-i18n="environmentLabel">Environment</span> <span class="req">*</span>
+  </label>
+  <select id="environment">
+    <option value="" selected="" data-i18n="environmentPH">Select environment</option>
+    <option value="indoor_cc" data-i18n="environment_indoor_cc">Indoor - Climate Controlled</option>
+    <option value="indoor" data-i18n="environment_indoor">Indoor - Standard</option>
+    <option value="outdoor_s" data-i18n="environment_outdoor_s">Outdoor - Sheltered</option>
+    <option value="outdoor" data-i18n="environment_outdoor">Outdoor - Exposed</option>
+    <option value="harsh" data-i18n="environment_harsh">Harsh (Dust/Humidity/Corrosive)</option>
+  </select>
+</div>
+
+<div class="input-group">
+  <label for="maintenanceLevel">
+    <span data-i18n="maintenanceLevelLabel">Maintenance Level</span> <span class="req">*</span>
+  </label>
+  <select id="maintenanceLevel">
+    <option value="" selected="" data-i18n="maintenanceLevelPH">Select maintenance level</option>
+    <option value="optimized" data-i18n="maintenanceLevel_optimized">Optimized (Predictive &amp; Digital)</option>
+    <option value="managed" data-i18n="maintenanceLevel_managed">Managed (Preventive Plan)</option>
+    <option value="basic" data-i18n="maintenanceLevel_basic">Basic (Reactive Only)</option>
+    <option value="unstructured" data-i18n="maintenanceLevel_unstructured">Unstructured</option>
+  </select>
+</div>
+
+<div class="section-title" style="margin-top:6px;">
+<h3 data-i18n="financialData">Financial Data</h3>
+<span class="pill required" data-i18n="required">Required</span>
+</div>
+<div class="hidden" id="inputAlerts"></div>
+<div class="input-group">
+<label data-i18n="downtimeHoursLabel" for="downtimeHours">Downtime Hours (Period)</label>
+<div class="helper">
+<strong data-i18n="whatItIs">What it is:</strong> <span data-i18n="dtWhat">Total hours when equipment was not operational during the analysis period.</span><br>
+<strong data-i18n="howCalc">How to calculate:</strong> <span data-i18n="dtHow">Sum of downtime durations across the period.</span><br>
+<strong data-i18n="example">Example:</strong> <span class="num-ltr" data-i18n="dtEx">2 days downtime = 48 hours</span>
+</div>
+<input data-i18n-placeholder="phDowntime" id="downtimeHours" min="0" placeholder="e.g., 48" step="0.1" type="number" value="0">
+<small data-i18n="downtimeSmall">Enter 0 if no downtime occurred</small>
+</div>
+<div class="input-group">
+<label for="totalCostInput">
+<span data-i18n="totalCostLabel">Total Downtime Cost (Period)</span> <span class="req">*</span>
+</label>
+<div class="helper">
+<strong data-i18n="whatItIs">What it is:</strong> <span data-i18n="tcWhat">Total financial loss from downtime during the selected analysis period.</span><br>
+<strong data-i18n="howCalc">How to calculate:</strong> <span data-i18n="tcHow">Downtime Hours × Cost per Hour (agreed with Finance).</span><br>
+<strong data-i18n="example">Example:</strong> <span class="num-ltr" data-i18n="tcEx">48 hours × 5,000 = 240,000</span>
+</div>
+<input data-i18n-placeholder="phTotalCost" id="totalCostInput" min="0" placeholder="e.g., 240000" step="0.01" type="number">
+<small><strong data-i18n="requiredStrong">Required:</strong> <span data-i18n="financeConfirm">Confirm this number with your Finance department</span></small>
+</div>
+<div class="input-group">
+<label for="analysisPeriod">
+<span data-i18n="analysisPeriodLabel">Analysis Period</span> <span class="req">*</span>
+</label>
+<div class="helper">
+<strong data-i18n="whatItIs">What it is:</strong> <span data-i18n="apWhat">The time window used to annualize your downtime cost.</span><br>
+<strong data-i18n="howCalc">How to calculate:</strong> <span data-i18n="apHow">Select the closest standard reporting period for your site.</span><br>
+<strong data-i18n="example">Example:</strong> <span class="num-ltr" data-i18n="apEx">One quarter = 90 days</span>
+</div>
+<select id="analysisPeriod">
+<option data-i18n="p30" value="30">One month (30 days)</option>
+<option data-i18n="p90" value="90">One quarter (90 days)</option>
+<option data-i18n="p180" value="180">Half year (180 days)</option>
+<option data-i18n="p365" value="365">One year (365 days)</option>
+</select>
+</div>
+<div class="input-group">
+<label data-i18n="reductionTargetLabel" for="reductionTarget">Target Downtime Reduction %</label>
+<div class="helper">
+<strong data-i18n="whatItIs">What it is:</strong> <span data-i18n="rtWhat">Your target percentage to reduce downtime.</span><br>
+<strong data-i18n="howCalc">How to calculate:</strong> <span data-i18n="rtHow">Set an improvement target agreed internally.</span><br>
+<strong data-i18n="example">Example:</strong> <span class="num-ltr" data-i18n="rtEx">20</span>
+</div>
+<input data-i18n-placeholder="phReduction" id="reductionTarget" max="100" min="0" placeholder="e.g., 20" step="0.1" type="number">
+</div>
+<div class="section-title" style="margin-top:6px;">
+<h3 data-i18n="omData">Operations &amp; Maintenance Data</h3>
+</div>
+<div class="input-group">
+<label data-i18n="operatingHoursLabel" for="operatingHours">Operating Hours in Period</label>
+<div class="helper">
+<strong data-i18n="whatItIs">What it is:</strong> <span data-i18n="ohWhat">Total scheduled operating hours during the analysis period.</span><br>
+<strong data-i18n="howCalc">How to calculate:</strong> <span data-i18n="ohHow">Hours per day × Days in period.</span><br>
+<strong data-i18n="example">Example:</strong> <span class="num-ltr" data-i18n="ohEx">24 × 30 = 720 hours</span>
+</div>
+<input data-i18n-placeholder="phOperating" id="operatingHours" min="0" placeholder="e.g., 720" step="0.1" type="number">
+<small data-i18n="ohSmall">Required to calculate Availability and reliability KPIs</small>
+</div>
+<div class="input-group">
+<label data-i18n="numFailuresLabel" for="numFailures">Number of Failures</label>
+<div class="helper">
+<strong data-i18n="whatItIs">What it is:</strong> <span data-i18n="nfWhat">Number of unplanned failures during the analysis period.</span><br>
+<strong data-i18n="howCalc">How to calculate:</strong> <span data-i18n="nfHow">Count incidents that required repair/intervention.</span><br>
+<strong data-i18n="example">Example:</strong> <span class="num-ltr" data-i18n="nfEx">6 failures in the month</span>
+</div>
+<input data-i18n-placeholder="phFailures" id="numFailures" min="0" placeholder="e.g., 6" step="1" type="number" value="0">
+</div>
+<div class="input-group">
+<label data-i18n="totalRepairHoursLabel" for="totalRepairHours">Total Repair Hours</label>
+<div class="helper">
+<strong data-i18n="whatItIs">What it is:</strong> <span data-i18n="trWhat">Total time spent repairing failures during the analysis period.</span><br>
+<strong data-i18n="howCalc">How to calculate:</strong> <span data-i18n="trHow">Sum of repair durations across all failures.</span><br>
+<strong data-i18n="example">Example:</strong> <span class="num-ltr" data-i18n="trEx">6 failures × 8 hours = 48 hours</span>
+</div>
+<input data-i18n-placeholder="phRepairHours" id="totalRepairHours" min="0" placeholder="e.g., 48" step="0.1" type="number" value="0">
+</div>
+<div class="button-row">
+<button class="btn primary" data-i18n="calcBtn" id="btnCalculate" onclick="calculateResults()" disabled="">Calculate Downtime Cost</button>
+<button class="btn secondary" data-i18n="resetBtn" onclick="resetForm()">Reset All</button>
+</div>
+</div>
+</div>
+<!-- OUTPUT -->
+<div class="panel">
+<div class="panel-head">
+<h2 data-i18n="outputResults">Output Results</h2>
+<span class="pill" data-i18n="results">Results</span>
+</div>
+<div class="panel-body">
+<div class="placeholder" id="placeholderBox">
+<h3 data-i18n="placeholderTitle">Your results will appear here</h3>
+<p>
+<span data-i18n="placeholderText">Complete the required inputs, then click </span>
+<strong data-i18n="placeholderStrong">Calculate Downtime Cost</strong>.
+              </p>
+</div>
+<!-- Financial Results -->
+<div class="result-block hidden" id="financialResults">
+<div class="result-title"><h3 data-i18n="financialPerspective">Financial Perspective</h3></div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiTotalDowntimeCost">Total Downtime Cost</div>
+<div class="kpi-value red num-ltr" id="totalCost">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="od1">The total downtime financial loss for the selected analysis period.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="od2">Total Downtime Cost (input)</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="od3">Provides a clear baseline for improvement decisions.</span>
+</div>
+</div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiCostPerHour">Cost per Downtime Hour</div>
+<div class="kpi-value num-ltr" id="costHour">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="ch1">Estimated hourly financial exposure when downtime occurs.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="ch2">Total Downtime Cost ÷ Downtime Hours</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="ch3">Quantifies the value of eliminating one downtime hour.</span>
+</div>
+</div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiAnnualExposure">Annual Financial Exposure</div>
+<div class="kpi-value red num-ltr" id="annualImpact">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="ai1">Estimated annual cost if the same trend continues.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="ai2">(Total Downtime Cost ÷ Period Days) × 365</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="ai3">Supports budgeting, ROI, and investment justification.</span>
+</div>
+</div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiPotentialSavings">Potential Annual Savings</div>
+<div class="kpi-value red num-ltr" id="annualSavings">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="as1">Estimated annual savings based on your improvement target.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="as2">Annual Financial Exposure × (Reduction Target ÷ 100)</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="as3">Connects reliability actions with measurable business value.</span>
+</div>
+</div>
+</div>
+<!-- Operations Results -->
+<div class="result-block hidden" id="operationResults">
+<div class="result-title"><h3 data-i18n="operationsPerspective">Operations Perspective</h3></div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiTotalDowntimeHours">Total Downtime Hours</div>
+<div class="kpi-value num-ltr" id="opDowntime">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="op1">Total downtime hours in the analysis period.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="op2">Downtime Hours (input)</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="op3">Direct driver of lost capacity and service disruption.</span>
+</div>
+</div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiAvailability">Availability %</div>
+<div class="kpi-value num-ltr" id="availability">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="av1">Percentage of time the equipment was available for operation.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="av2">((Operating Hours − Downtime Hours) ÷ Operating Hours) × 100</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="av3">A core reliability KPI with direct operational impact.</span>
+</div>
+</div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiDowntimePerFailure">Downtime per Failure (Average)</div>
+<div class="kpi-value num-ltr" id="downtimePerFailure">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="df1">Average downtime duration per failure event.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="df2">Downtime Hours ÷ Number of Failures</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="df3">Distinguishes quick fixes from major breakdowns.</span>
+</div>
+</div>
+</div>
+<!-- Maintenance Results -->
+<div class="result-block hidden" id="maintenanceResults">
+<div class="result-title"><h3 data-i18n="maintenancePerspective">Maintenance Perspective</h3></div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiMTBF">MTBF (Mean Time Between Failures)</div>
+<div class="kpi-value num-ltr" id="mtbf">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="mb1">Average operating time between failures (reliability indicator).</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="mb2">Operating Hours ÷ Number of Failures</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="mb3">Higher MTBF indicates fewer failures and stronger reliability.</span>
+</div>
+</div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiMTTR">MTTR (Mean Time To Repair)</div>
+<div class="kpi-value num-ltr" id="mttr">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="mr1">Average time to restore equipment after a failure.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="mr2">Total Repair Hours ÷ Number of Failures</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="mr3">Lower MTTR reduces disruption and cost exposure.</span>
+</div>
+</div>
+<div class="metric">
+<div class="kpi-label" data-i18n="kpiFailureRate">Failure Rate</div>
+<div class="kpi-value num-ltr" id="failureRate">—</div>
+<div class="outdef">
+<strong data-i18n="outWhatItMeans">What it means:</strong> <span data-i18n="fr1">Failures per 1,000 operating hours.</span><br>
+<strong data-i18n="outFormula">Formula:</strong> <span data-i18n="fr2">(Number of Failures ÷ Operating Hours) × 1000</span><br>
+<strong data-i18n="outWhyMatters">Why it matters:</strong> <span data-i18n="fr3">Enables comparison across assets and sites.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- FULL-WIDTH SUMMARY + RECOMMENDATIONS -->
+<div class="full-width">
+<!-- Executive Summary -->
+<div class="exec-wrap hidden" id="execSummary">
+<div class="exec-head">
+<span style="font-size:22px;">📊</span>
+<span data-i18n="execSummary">Executive Summary</span>
+</div>
+<div class="exec-body">
+<div class="exec-grid">
+<div class="exec-card">
+<h4 data-i18n="companyOverview">Company Overview</h4>
+<p>
+<span id="exCompanyLine">—</span><br>
+<span id="exDateLine">—</span><br>
+<span id="exPeriodLine">—</span>
+</p>
+</div>
+<div class="exec-card">
+<h4 data-i18n="financialImpact">Financial Impact</h4>
+<p>
+<span id="exTotalCostLine">—</span><br>
+<span id="exAnnualImpactLine">—</span>
+</p>
+</div>
+<div class="exec-card">
+<h4 data-i18n="operationalPerformance">Operational Performance</h4>
+<p>
+<span id="exAvailabilityLine">—</span>
+<span id="exAvailBenchmark" style="margin-left: 8px; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: rgb(12, 84, 96);"></span><br>
+<span data-i18n="targetLine" id="exTargetLine" style="font-size:12px; color:#666;">Target: ≥85% (World-class: ≥95%)</span>
+</p>
+</div>
+<div class="exec-card">
+<h4 data-i18n="maintenanceEfficiency">Maintenance Efficiency</h4>
+<p>
+<span id="exMtbfLine">—</span>
+<span id="exMtbfBenchmark" style="margin-left: 8px; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: rgb(114, 28, 36);"></span><br>
+<span id="exMttrLine">—</span>
+<span id="exMttrBenchmark" style="margin-left: 8px; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: rgb(114, 28, 36);"></span><br>
+<span data-i18n="targetLine" id="exMaintTargetLine" style="font-size:12px; color:#666; margin-top:8px; display:block;">Target: ≥85% (World-class: ≥95%)</span>
+</p>
+</div>
+</div>
+<!-- Embedded Benchmark Comparison in Executive Summary -->
+<div id="execBenchmarkSection" style="margin-top: 16px; background: linear-gradient(135deg, rgb(255, 245, 245) 0%, rgb(255, 255, 255) 100%); border-radius: 12px; padding: 20px; border-left: 4px solid rgb(255, 0, 15); display: none;">
+<h4 style="color: #FF000F; margin-bottom: 15px; font-size: 1.1em; display:flex; align-items:center; gap:8px;">
+<span>📊</span>
+<span data-i18n="benchmarkTitle" id="execBenchmarkTitle">Protection Level Comparison</span>
+<span id="execBenchmarkIndustry" style="font-weight:normal; color:#666;">- Oil &amp; Gas</span>
+</h4>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+<!-- Availability -->
+<div style="background: white; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:6px;">
+<strong data-i18n="availabilityLabel">Availability</strong>
+<span id="execAvailStatus" style="font-size: 12px; padding: 2px 8px; border-radius: 4px; background: rgb(209, 236, 241); color: rgb(12, 84, 96);">✅ جيد</span>
+</div>
+<div id="execAvailValue" style="font-size: 1.3em; font-weight: bold; color: #333;">90.21%</div>
+<div style="font-size: 0.8em; color: #888; margin-top:4px;">
+<span data-i18n="industryRange">Target Range</span>: <span id="execAvailRange">85% - 95%</span>
+</div>
+</div>
+<!-- MTBF -->
+<div style="background: white; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:6px;">
+<strong>MTBF</strong>
+<span id="execMtbfStatus" style="font-size: 12px; padding: 2px 8px; border-radius: 4px; background: rgb(248, 215, 218); color: rgb(114, 28, 36);">⚠️ يحتاج حماية</span>
+</div>
+<div id="execMtbfValue" style="font-size: 1.3em; font-weight: bold; color: #333;">96.0 ساعة</div>
+<div style="font-size: 0.8em; color: #888; margin-top:4px;">
+<span data-i18n="industryRange">Target Range</span>: <span id="execMtbfRange">8,000 - 15,000 ساعة</span>
+</div>
+</div>
+<!-- MTTR -->
+<div style="background: white; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:6px;">
+<strong>MTTR</strong>
+<span id="execMttrStatus" style="font-size: 12px; padding: 2px 8px; border-radius: 4px; background: rgb(248, 215, 218); color: rgb(114, 28, 36);">⚠️ يحتاج حماية</span>
+</div>
+<div id="execMttrValue" style="font-size: 1.3em; font-weight: bold; color: #333;">9.6 ساعة</div>
+<div style="font-size: 0.8em; color: #888; margin-top:4px;">
+<span data-i18n="industryRange">Target Range</span>: <span id="execMttrRange">3 - 8 ساعة</span>
+</div>
+</div>
+</div>
+<div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.8em; color: #888;">
+                📚 <span data-i18n="referenceLabel">Reference</span>: <span id="execBenchmarkRef">OREDA, ISO 14224, API</span>
+</div>
+</div>
+<div class="exec-disclaimer" data-i18n="disclaimer">This calculator does not constitute an offer, warranty, or commitment by ABB. ABB is not responsible for decisions made based on this tool’s outputs. For a validated assessment, ABB recommends a site review and joint data verification with the customer.</div>
+</div>
+</div>
+<!-- Recommendations -->
+<div class="rec-wrap hidden" id="criticalRec">
+<div class="rec-head">
+<span style="font-size:22px;">⚠️</span>
+<span data-i18n="criticalRec">Critical Recommendations</span>
+</div>
+<div class="rec-body">
+<div>
+<div class="rec-card" style="margin-top:12px;">
+<h4 data-i18n="operationalAssessment">Operational Protection Assessment</h4>
+<p id="recNarrative">—</p>
+</div>
+<div class="rec-card">
+<h4 data-i18n="financialMessage">Financial message</h4>
+<p>
+<span data-i18n="fm1">An unavailability level of</span> <span class="rec-kpi num-ltr" id="recUnavailPct">—</span>
+<span data-i18n="fm2">is associated with an estimated</span> <span class="rec-kpi num-ltr" id="recAnnualLoss">—</span>
+<span data-i18n="fm3">in current annual financial exposure.</span>
+<span data-i18n="fm4">If you deliver</span> <span class="rec-kpi num-ltr" id="recImprovePct">—</span>
+<span data-i18n="fm5">downtime reduction, the estimated annual savings opportunity is</span>
+<span class="rec-kpi num-ltr" id="recAnnualSave">—</span>.
+                </p>
+</div>
+<div class="rec-card">
+<h4 data-i18n="nextActions">Recommended next actions</h4>
+<div id="recActions">—</div>
+</div>
+</div>
+<div class="cta">
+<p data-i18n="ctaText">Share your results with ABB and get a tailored reliability improvement plan aligned with Power Care.</p>
+<a data-i18n="ctaBtn" href="https://campaign-el.abb.com/l/961032/2026-02-06/7sblf" id="ctaMail" rel="noopener" target="_blank">Consult ABB experts</a>
+<div id="exportWrap" style="text-align:center; margin:20px 0;"><button class="btn primary" data-i18n="exportPdfBtn" onclick="exportPDF()">Export Results as PDF</button></div>
+<p data-i18n="ctaTip" style="color:var(--muted);font-size:12px;">Tip: Add Operating Hours + Failures + Repair Hours for a stronger diagnostic.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<strong>ABB Power Care</strong><br>
+<span data-i18n="footerLine">Keep your operations unstoppable.</span><br>
+<span data-i18n="contactLabel">Contact:</span> <span class="num-ltr" id="abbEmailText">mohamed.Abdel-Bary@eg.abb.com</span>
+
+  <div style="margin-top:10px; font-size:12px; color:#64748b;">Inputs are used only to calculate your estimate and are not stored or sent.</div>
+</div>
+</div>
+</div>
+<script>
+    const ABB_EXPERT_EMAIL = 'mohamed.Abdel-Bary@eg.abb.com';
+
+    // ============================================
+    // AUTO-RESET ON PAGE LOAD/RELOAD
+    // ============================================
+    function autoResetOnLoad() {
+      // Reset all number inputs
+      document.querySelectorAll('input[type="number"]').forEach(function(input) {
+        if (input.id === 'downtimeHours' || input.id === 'numFailures' || input.id === 'totalRepairHours') {
+          input.value = '0';
+        } else {
+          input.value = '';
+        }
+      });
+      
+      // Reset all text inputs
+      document.querySelectorAll('input[type="text"]').forEach(function(input) {
+        input.value = '';
+      });
+      
+      // Reset email input
+      document.querySelectorAll('input[type="email"]').forEach(function(input) {
+        input.value = '';
+      });
+      
+      // Reset all dropdowns to defaults
+      var currencyEl = document.getElementById('currency');
+      var periodEl = document.getElementById('analysisPeriod');
+      var industryEl = document.getElementById('industry');
+      if (currencyEl) currencyEl.value = 'EGP';
+      if (periodEl) periodEl.value = '30';
+      if (industryEl) industryEl.value = 'general';
+      
+      // Reset KPI displays to dash
+      ['totalCost','costHour','annualImpact','annualSavings','opDowntime','availability','downtimePerFailure','mtbf','mttr','failureRate']
+        .forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) el.textContent = '—';
+        });
+      
+      // Show placeholder, hide results
+      var placeholder = document.getElementById('placeholderBox');
+      if (placeholder) placeholder.classList.remove('hidden');
+      
+      // Hide all result sections
+      ['financialResults','operationResults','maintenanceResults','execSummary','criticalRec'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+      
+      // Clear stored payloads
+      window.__LAST_SUMMARY__ = null;
+      window.__LAST_RECO__ = null;
+      window.__LAST_CTA__ = null;
+      
+      // Clear alerts
+      var alertBox = document.getElementById('inputAlerts');
+      if (alertBox) {
+        alertBox.classList.add('hidden');
+        alertBox.innerHTML = '';
+      }
+      
+      // Reset executive summary benchmark section
+      var execBenchSection = document.getElementById('execBenchmarkSection');
+      if (execBenchSection) execBenchSection.style.display = 'none';
+      
+      // Reset executive summary cards text
+      ['exCompanyLine','exDateLine','exPeriodLine','exTotalCostLine','exAnnualImpactLine','exAvailabilityLine','exMtbfLine','exMttrLine']
+        .forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) el.textContent = '—';
+        });
+      
+      // Reset recommendation texts
+      var recNarrative = document.getElementById('recNarrative');
+      if (recNarrative) recNarrative.textContent = '—';
+      var recActions = document.getElementById('recActions');
+      if (recActions) recActions.textContent = '—';
+      
+      ['recUnavailPct','recAnnualLoss','recImprovePct','recAnnualSave'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = '—';
+      });
+      
+      // Clear benchmark badges
+      ['exAvailBenchmark','exMtbfBenchmark','exMttrBenchmark'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.textContent = '';
+          el.style.background = '';
+        }
+      });
+      
+      console.log('✅ Calculator auto-reset on page load');
+    }
+    
+    // Trigger on page load AND back button
+    window.addEventListener('pageshow', function(event) {
+      autoResetOnLoad();
+      setTimeout(function() {
+        if (typeof validateRequired === 'function') {
+          validateRequired();
+        }
+      }, 100);
+    });
+    // ============================================
+
+
+    const watchIds = [
+             'downtimeHours','totalCostInput','analysisPeriod','operatingHours','numFailures','totalRepairHours',
+              'currency','reductionTarget','companyName','userEmail','userTitle','equipmentType','equipmentAge','environment','maintenanceLevel'
+        ];
+
+
+    // -------------------------
+    // i18n dictionary (UI only)
+    // -------------------------
+    const I18N = {
+      en: {
+        // Header/Hero
+        backBtn: "← Contact us for more information",
+        title: "Downtime Business Assessment Tool",
+        subtitle: "Discover the true cost of downtime, measure your equipment reliability, and uncover your savings potential.",
+        
+        // Industry Selector Labels
+        industryLabel: "Industry Sector",
+        indGeneral: "Select your industry",
+        indOilGas: "Oil & Gas",
+        indChemical: "Chemical Processing",
+        indManufacturing: "Manufacturing (General)",
+        indPower: "Utilities (Power)",
+        indMining: "Mining",
+        indDatacenter: "Data Centers",
+        indHotel: "Hotels & Hospitality",
+        indBank: "Banks & Financial Services",
+        indCement: "Cement",
+        indSteel: "Steel",
+        indGlass: "Glass",
+        indFood: "Food & Beverage",
+        indAutomotive: "Automotive Assembly",
+        indPharma: "Pharmaceutical",
+        indPaper: "Paper & Pulp",
+        indPetrochem: "Petrochemical",
+        
+        // Benchmark Labels
+        benchmarkTitle: "Protection Level Comparison",
+        benchExcellent: "Excellent",
+        benchGood: "Good",
+        benchBelowAvg: "Needs Protection",
+        industryRange: "Target Range",
+        referenceLabel: "Reference",
+        equipmentBenchmark: "⚙️ Equipment Benchmark",
+        industryBenchmark: "🏭 Industry Benchmark",
+        targetRange: "Target Range",
+        ieeeBaseline: "IEEE Baseline",
+        reference: "Reference",
+        availabilityLabel: "Availability",
+        selectIndustryMsg: "Please select an industry to show benchmark comparison",
+        // KPI Conclusion Translations
+        sevCritical: "Unavailability is critical. Immediate intervention required to prevent significant losses.",
+        sevHigh: "Unavailability is high. Prioritize root cause analysis and corrective actions.",
+        sevModerate: "Unavailability is slightly above target. Improve preventive actions and refine response/repair execution to reduce downtime.",
+        sevGoodGeneric: "Unavailability is within acceptable range. Continue current maintenance practices.",
+        sevBelowBenchmark: "Availability is below industry benchmark. Immediate action required to improve reliability and reduce downtime.",
+        sevAboveBenchmark: "Availability exceeds industry benchmark. Excellent performance! Focus on maintaining current practices.",
+        sevWithinBenchmark: "Availability is within industry benchmark. Improve preventive actions and refine response/repair execution to reach world-class levels.",
+        // Benchmark-aligned recommendation translations
+        sevBelowIndustry: "Performance is below industry benchmark. Immediate action recommended to improve availability.",
+        sevExcellent: "Excellent! Performance exceeds industry benchmark. Focus on maintaining this level.",
+        sevWithinRange: "Performance is within industry range. Consider improvements to reach world-class levels.",
+        actMttrAboveBmk: "1. Strengthen response readiness: review repair workflows, spares, and escalation paths to approach best-in-class MTTR.",
+        actMttrWithinBmk: "1. Maintain fast restoration capability: keep spare strategy and response workflows stable.",
+        actMttrBelowBmk: "1. Excellent repair time: document best practices and train teams to sustain performance.",
+        actMtbfBelowBmk: "2. Stabilize reliability: prioritize the top failure modes and protect critical components to lift MTBF.",
+        actMtbfWithinBmk: "2. Good reliability: continue preventive maintenance and consider predictive techniques.",
+        actMtbfAboveBmk: "2. Excellent reliability: focus on sustaining MTBF through proactive maintenance strategies.",
+        actGeneral: "3. Moderate failure frequency: focus on proactive inspection plans and targeted upgrades.",
+
+        
+        // Equipment Details
+        equipDetailsTitle: "Equipment Details",
+        equipmentTypeLabel: "Equipment Type",
+        equipmentTypePH: "Select equipment type",
+        equipmentType_general: "General Industry",
+        equipmentType_mv_swg: "MV Switchgear (1kV - 36kV)",
+        equipmentType_lv_swg: "LV Switchgear (< 1kV)",
+        equipmentType_mv_lv: "MV/LV Combined",
+
+        equipmentAgeLabel: "Equipment Age",
+        equipmentAgePH: "Select equipment age",
+        equipmentAge_new: "< 5 years (New)",
+        equipmentAge_mid: "5-15 years (Mid-life)",
+        equipmentAge_aging: "15-25 years (Aging)",
+        equipmentAge_end: "> 25 years (End-of-life)",
+
+        environmentLabel: "Environment",
+        environmentPH: "Select environment",
+        environment_indoor_cc: "Indoor - Climate Controlled",
+        environment_indoor: "Indoor - Standard",
+        environment_outdoor_s: "Outdoor - Sheltered",
+        environment_outdoor: "Outdoor - Exposed",
+        environment_harsh: "Harsh (Dust/Humidity/Corrosive)",
+
+        maintenanceLevelLabel: "Maintenance Level",
+        maintenanceLevelPH: "Select maintenance level",
+        maintenanceLevel_optimized: "Optimized (Predictive & Digital)",
+        maintenanceLevel_managed: "Managed (Preventive Plan)",
+        maintenanceLevel_basic: "Basic (Reactive Only)",
+        maintenanceLevel_unstructured: "Unstructured",
+
+// Placeholders
+        phCompany: "Enter company name",
+        phTitle: "e.g., Maintenance Manager",
+        phEmail: "your.email@company.com",
+        phDowntime: "e.g., 48",
+        phTotalCost: "e.g., 240000",
+        phReduction: "e.g., 20",
+        phOperating: "e.g., 720",
+        phFailures: "e.g., 6",
+        phRepairHours: "e.g., 48",
+
+        // Currency options
+        curEGP: "EGP - Egyptian Pound",
+        curUSD: "USD - US Dollar",
+        curSAR: "SAR - Saudi Riyal",
+        curAED: "AED - UAE Dirham",
+        curEUR: "EUR - Euro",
+
+        // Panels
+        inputInfo: "Input Information",
+        outputResults: "Output Results",
+        requiredIncluded: "Required fields included",
+        optional: "Optional",
+        required: "Required",
+        results: "Results",
+
+        // Sections/Labels
+        companyInfo: "Company Information",
+        financialData: "Financial Data",
+        omData: "Operations & Maintenance Data",
+
+        companyNameLabel: "Company Name",
+        userTitleLabel: "Your Title",
+        userEmailLabel: "Email",
+        currencyLabel: "Currency",
+
+        downtimeHoursLabel: "Downtime Hours (Period)",
+        totalCostLabel: "Total Downtime Cost (Period)",
+        analysisPeriodLabel: "Analysis Period",
+        reductionTargetLabel: "Target Downtime Reduction %",
+
+        operatingHoursLabel: "Operating Hours in Period",
+        numFailuresLabel: "Number of Failures",
+        totalRepairHoursLabel: "Total Repair Hours",
+
+        // Helper keywords
+        whatItIs: "What it is:",
+        howCalc: "How to calculate:",
+        example: "Example:",
+
+        // Helper text
+        dtWhat: "Total hours when equipment was not operational during the analysis period.",
+        dtHow: "Sum of downtime durations across the period.",
+        dtEx: "2 days downtime = 48 hours",
+        downtimeSmall: "Enter 0 if no downtime occurred",
+
+        tcWhat: "Total financial loss from downtime during the selected analysis period.",
+        tcHow: "Downtime Hours × Cost per Hour (agreed with Finance).",
+        tcEx: "48 hours × 5,000 = 240,000",
+        requiredStrong: "Required:",
+        financeConfirm: "Confirm this number with your Finance department",
+
+        apWhat: "The time window used to annualize your downtime cost.",
+        apHow: "Select the closest standard reporting period for your site.",
+        apEx: "One quarter = 90 days",
+        p30: "One month (30 days)",
+        p90: "One quarter (90 days)",
+        p180: "Half year (180 days)",
+        p365: "One year (365 days)",
+
+        rtWhat: "Your target percentage to reduce downtime.",
+        rtHow: "Set an improvement target agreed internally.",
+        rtEx: "20",
+        optionalSmall: "Optional",
+
+        ohWhat: "Total scheduled operating hours during the analysis period.",
+        ohHow: "Hours per day × Days in period.",
+        ohEx: "24 × 30 = 720 hours",
+        ohSmall: "Required to calculate Availability and reliability KPIs",
+
+        nfWhat: "Number of unplanned failures during the analysis period.",
+        nfHow: "Count incidents that required repair/intervention.",
+        nfEx: "6 failures in the month",
+
+        trWhat: "Total time spent repairing failures during the analysis period.",
+        trHow: "Sum of repair durations across all failures.",
+        trEx: "6 failures × 8 hours = 48 hours",
+
+        // Buttons
+        calcBtn: "Generate Assessment",
+        resetBtn: "Reset All",
+        exportPdfBtn: "Export Results as PDF",
+
+        // Placeholder
+        placeholderTitle: "Your results will appear here",
+        placeholderText: "Complete the required inputs, then click ",
+        placeholderStrong: "Generate Assessment",
+
+        // Perspectives
+        financialPerspective: "Financial Perspective",
+        operationsPerspective: "Operations Perspective",
+        maintenancePerspective: "Maintenance Perspective",
+
+        // KPI labels
+        kpiTotalDowntimeCost: "Total Downtime Cost",
+        kpiCostPerHour: "Cost per Downtime Hour",
+        kpiAnnualExposure: "Annual Financial Exposure",
+        kpiPotentialSavings: "Potential Annual Savings",
+
+        kpiTotalDowntimeHours: "Total Downtime Hours",
+        kpiAvailability: "Availability %",
+        kpiDowntimePerFailure: "Downtime per Failure (Average)",
+
+        kpiMTBF: "MTBF (Mean Time Between Failures)",
+        kpiMTTR: "MTTR (Mean Time To Repair)",
+        kpiFailureRate: "Failure Rate",
+
+        // Output definition headings
+        outWhatItMeans: "What it means:",
+        outFormula: "Formula:",
+        outWhyMatters: "Why it matters:",
+
+        // Output definitions
+        od1: "The total downtime financial loss for the selected analysis period.",
+        od2: "Total Downtime Cost (input)",
+        od3: "Provides a clear baseline for improvement decisions.",
+
+        ch1: "Estimated hourly financial exposure when downtime occurs.",
+        ch2: "Total Downtime Cost ÷ Downtime Hours",
+        ch3: "Quantifies the value of eliminating one downtime hour.",
+
+        ai1: "Estimated annual cost if the same trend continues.",
+        ai2: "(Total Downtime Cost ÷ Period Days) × 365",
+        ai3: "Supports budgeting, ROI, and investment justification.",
+
+        as1: "Estimated annual savings based on your improvement target.",
+        as2: "Annual Financial Exposure × (Reduction Target ÷ 100)",
+        as3: "Connects reliability actions with measurable business value.",
+
+        op1: "Total downtime hours in the analysis period.",
+        op2: "Downtime Hours (input)",
+        op3: "Direct driver of lost capacity and service disruption.",
+
+        av1: "Percentage of time the equipment was available for operation.",
+        av2: "((Operating Hours − Downtime Hours) ÷ Operating Hours) × 100",
+        av3: "A core reliability KPI with direct operational impact.",
+
+        df1: "Average downtime duration per failure event.",
+        df2: "Downtime Hours ÷ Number of Failures",
+        df3: "Distinguishes quick fixes from major breakdowns.",
+
+        mb1: "Average operating time between failures (reliability indicator).",
+        mb2: "Operating Hours ÷ Number of Failures",
+        mb3: "Higher MTBF indicates fewer failures and stronger reliability.",
+
+        mr1: "Average time to restore equipment after a failure.",
+        mr2: "Total Repair Hours ÷ Number of Failures",
+        mr3: "Lower MTTR reduces disruption and cost exposure.",
+
+        fr1: "Failures per 1,000 operating hours.",
+        fr2: "(Number of Failures ÷ Operating Hours) × 1000",
+        fr3: "Enables comparison across assets and sites.",
+
+        // Executive / Reco
+        execSummary: "Executive Summary",
+        companyOverview: "Company Overview",
+        financialImpact: "Financial Impact",
+        operationalPerformance: "Operational Performance",
+        maintenanceEfficiency: "Maintenance Efficiency",
+        targetLine: "Target: ≥85% (World-class: ≥95%)",
+
+        disclaimer: "This calculator does not constitute an offer, warranty, or commitment by ABB. ABB is not responsible for decisions made based on this tool’s outputs. For a validated assessment, ABB recommends a site review and joint data verification with the customer.",
+
+        criticalRec: "Critical Recommendations",
+        operationalAssessment: "Operational Protection Assessment",
+        financialMessage: "Financial message",
+        nextActions: "Recommended next actions",
+
+        fm1: "An unavailability level of",
+        fm2: "is associated with an estimated",
+        fm3: "in current annual financial exposure.",
+        fm4: "If you deliver",
+        fm5: "downtime reduction, the estimated annual savings opportunity is",
+
+        ctaText: "Share your results with ABB and get a tailored reliability improvement plan aligned with Power Care.",
+        ctaBtn: "Consult ABB experts",
+        ctaTip: "Tip: Add Operating Hours + Failures + Repair Hours for a stronger diagnostic.",
+
+        footerLine: "Keep your operations unstoppable.",
+	unitDays: "days",
+	unitHrs: "hrs",
+	unitPer1000: "/1000 hrs",
+
+        contactLabel: "Contact:",
+
+        // Executive line templates
+        exCompanyPrefix: "Company:",
+        exDatePrefix: "Analysis Date:",
+        exPeriodPrefix: "Period:",
+        exTotalCostPrefix: "Total Cost:",
+        exAnnualImpactPrefix: "Annual Impact:",
+        exAvailabilityPrefix: "Availability:",
+        exMtbfPrefix: "MTBF:",
+        exMttrPrefix: "MTTR:",
+
+        // Runtime strings (alerts/confirm)
+        confirmReset: "Are you sure you want to reset all fields?",
+        alertTotalCost: "Please enter a valid Total Downtime Cost (Period).",
+        alertPeriod: "Please select a valid Analysis Period.",
+        warnDowntimeZero: "<strong>Validation note:</strong> Downtime Hours is 0 but Total Downtime Cost is greater than 0. Please confirm the inputs.",
+        errOpLessDowntime: "<strong>Invalid input:</strong> Operating Hours cannot be less than Downtime Hours.",
+        needFailuresData: "Need failures data",
+        noDowntime: "N/A (no downtime)",
+        na: "N/A",
+        dash: "—",
+
+              sevNoData: "Add Operating Hours (and ideally Failures + Repair Hours) to generate a more accurate reliability recommendation.",
+              sevCritical: "Unavailability is significantly above target. This often indicates recurring failures, long repair times, or gaps in spares/service readiness.",
+              sevHigh: "Unavailability is above target. Focus on response readiness and the highest-impact failure drivers to reduce downtime hours.",
+              sevModerate: "Unavailability is slightly above target. Improve preventive actions and refine response/repair execution to reduce downtime.",
+              sevGood: "Availability is healthy. Consider optimization and predictive actions to protect performance and extend asset life.",
+
+        // Smart recommendation action texts
+        actMttrHigh: "Improve response time: reduce MTTR by optimizing fault isolation, critical spares availability, and service coverage.",
+        actMttrMed: "Strengthen response readiness: review repair workflows, spares, and escalation paths to approach best-in-class MTTR.",
+        actMttrGood: "Maintain fast restoration capability: keep spare strategy and response workflows stable.",
+        actNeedMttr: "Provide Failures and Total Repair Hours to calculate MTTR and refine the response-time recommendation.",
+
+        actMtbfLow: "Improve reliability: increase MTBF by addressing recurrent failure causes and introducing condition-based maintenance.",
+        actMtbfMed: "Stabilize reliability: prioritize the top failure modes and protect critical components to lift MTBF.",
+        actMtbfGood: "Reliability is strong: consider predictive monitoring to sustain performance.",
+        actNeedMtbf: "Provide Failures to calculate MTBF and strengthen the reliability recommendation.",
+
+        actFailRateHigh: "High failure frequency: perform asset health review and prioritize corrective actions on the dominant failure drivers.",
+        actFailRateMed: "Moderate failure frequency: focus on proactive inspection plans and targeted upgrades.",
+        actFailRateLow: "Failure frequency is low: keep current reliability strategy and monitor trends.",
+
+        // CTA mail
+        mailSubject: "ABB Power Care Consultation Request",
+        mailHello: "Hello ABB Team,",
+        mailLine1: "I would like to review our downtime results and discuss improvement opportunities.",
+        mailCompany: "Company:",
+        mailMyEmail: "My Email:",
+        mailPeriod: "Selected Analysis Period (days):",
+        mailDowntime: "Downtime Hours:",
+        mailTotalCost: "Total Downtime Cost (Period):",
+        mailAnnual: "Annual Financial Exposure:",
+        mailTarget: "Target Downtime Reduction:",
+        mailThanks: "Thank you!"
+
+      },
+
+      ar: {
+        // Header/Hero
+        backBtn: "← تواصل معنا لمزيد من المعلومات",
+        title: "أداة تقييم أثر التوقف التشغيلي",
+        subtitle:"اكتشف التكلفة الحقيقية للتوقف، وقِس موثوقية معداتك، واكشف عن إمكانيات تخفيض تكلفة التوقف لديك.",
+        
+        // Industry Selector Labels
+        industryLabel: "القطاع الصناعي",
+        indGeneral: "اختر قطاعك الصناعي",
+        indOilGas: "النفط والغاز",
+        indChemical: "الصناعات الكيميائية",
+        indManufacturing: "التصنيع العام",
+        indPower: "المرافق (الطاقة)",
+        indMining: "التعدين",
+        indDatacenter: "مراكز البيانات",
+        indHotel: "الفنادق والضيافة",
+        indBank: "البنوك والخدمات المالية",
+        indCement: "الأسمنت",
+        indSteel: "الحديد والصلب",
+        indGlass: "الزجاج",
+        indFood: "الأغذية والمشروبات",
+        indAutomotive: "تصنيع السيارات",
+        indPharma: "الأدوية",
+        indPaper: "الورق واللب",
+        indPetrochem: "البتروكيماويات",
+        
+        // Benchmark Labels
+        benchmarkTitle: "مقارنة مع معايير القطاع",
+        benchExcellent: "ممتاز",
+        benchGood: "جيد",
+        benchBelowAvg: "يحتاج حماية",
+        industryRange: "نطاق القطاع",
+        referenceLabel: "المرجع",
+        equipmentBenchmark: "⚙️ معيار المعدّة",
+        industryBenchmark: "🏭 معيار الصناعة",
+        targetRange: "النطاق المستهدف",
+        ieeeBaseline: "الأساس المرجعي IEEE",
+        reference: "المرجع",
+        availabilityLabel: "الإتاحة",
+        selectIndustryMsg: "يرجى اختيار القطاع الصناعي لعرض مقارنة المعايير",
+        // KPI Conclusion Translations
+        sevCritical: "عدم الإتاحة حرج. مطلوب تدخل فوري لمنع خسائر كبيرة.",
+        sevHigh: "عدم الإتاحة مرتفع. إعطاء الأولوية لتحليل السبب الجذري والإجراءات التصحيحية.",
+        sevModerate: "عدم الإتاحة أعلى قليلاً من الهدف. تحسين الإجراءات الوقائية وتحسين تنفيذ الاستجابة/الإصلاح لتقليل التوقف.",
+        sevGoodGeneric: "عدم الإتاحة ضمن النطاق المقبول. استمر في ممارسات الصيانة الحالية.",
+        sevBelowBenchmark: "الإتاحة أقل من معيار القطاع. مطلوب إجراء فوري لتحسين الموثوقية وتقليل التوقف.",
+        sevAboveBenchmark: "الإتاحة تتجاوز معيار القطاع. أداء ممتاز! ركز على الحفاظ على الممارسات الحالية.",
+        sevWithinBenchmark: "الإتاحة ضمن معيار القطاع. تحسين الإجراءات الوقائية للوصول إلى المستوى العالمي.",
+        // Benchmark-aligned recommendation translations
+        sevBelowIndustry: "الأداء أقل من معيار القطاع. يُوصى باتخاذ إجراء فوري لتحسين الإتاحة.",
+        sevExcellent: "ممتاز! الأداء يتجاوز معيار القطاع. ركز على الحفاظ على هذا المستوى.",
+        sevWithinRange: "الأداء ضمن نطاق القطاع. فكر في التحسينات للوصول إلى المستوى العالمي.",
+        actMttrAboveBmk: "1. تعزيز جاهزية الاستجابة: مراجعة سير عمل الإصلاح وقطع الغيار ومسارات التصعيد.",
+        actMttrWithinBmk: "1. الحفاظ على قدرة الاستعادة السريعة: الحفاظ على استراتيجية قطع الغيار وسير العمل.",
+        actMttrBelowBmk: "1. وقت إصلاح ممتاز: توثيق أفضل الممارسات وتدريب الفرق.",
+        actMtbfBelowBmk: "2. تثبيت الموثوقية: إعطاء الأولوية لأنماط الفشل الرئيسية وحماية المكونات الحرجة.",
+        actMtbfWithinBmk: "2. موثوقية جيدة: مواصلة الصيانة الوقائية والنظر في التقنيات التنبؤية.",
+        actMtbfAboveBmk: "2. موثوقية ممتازة: التركيز على الحفاظ على MTBF من خلال استراتيجيات الصيانة الاستباقية.",
+        actGeneral: "3. تكرار فشل معتدل: التركيز على خطط الفحص الاستباقي والترقيات المستهدفة.",
+
+
+        
+        // تفاصيل المعدات
+        equipDetailsTitle: "تفاصيل المعدات",
+        equipmentTypeLabel: "نوع المعدة",
+        equipmentTypePH: "اختر نوع المعدة",
+        equipmentType_general: "صناعات عامة",
+        equipmentType_mv_swg: "لوحات جهد متوسط (1–36 ك.ف)",
+        equipmentType_lv_swg: "لوحات جهد منخفض (< 1 ك.ف)",
+        equipmentType_mv_lv: "جهد متوسط/منخفض مجمّع",
+
+        equipmentAgeLabel: "عمر المعدة",
+        equipmentAgePH: "اختر عمر المعدة",
+        equipmentAge_new: "أقل من 5 سنوات (جديدة)",
+        equipmentAge_mid: "5–15 سنة (متوسطة العمر)",
+        equipmentAge_aging: "15–25 سنة (قادمة)",
+        equipmentAge_end: "أكثر من 25 سنة (نهاية العمر)",
+
+        environmentLabel: "بيئة التشغيل",
+        environmentPH: "اختر بيئة التشغيل",
+        environment_indoor_cc: "داخلي – تحكم مناخي",
+        environment_indoor: "داخلي – عادي",
+        environment_outdoor_s: "خارجي – محمي",
+        environment_outdoor: "خارجي – مكشوف",
+        environment_harsh: "قاسية (أتربة/رطوبة/تآكل)",
+
+        maintenanceLevelLabel: "مستوى الصيانة",
+        maintenanceLevelPH: "اختر مستوى الصيانة",
+        maintenanceLevel_optimized: "مُحسَّن (تنبؤي ورقمي)",
+        maintenanceLevel_managed: "مُدار (خطة وقائية)",
+        maintenanceLevel_basic: "أساسي (تفاعلي فقط)",
+        maintenanceLevel_unstructured: "غير منظم",
+
+// Placeholders
+        phCompany: "اكتب اسم الشركة",
+        phTitle: "مثال: مدير الصيانة",
+        phEmail: "your.email@company.com",
+        phDowntime: "مثال: 48",
+        phTotalCost: "مثال: 240000",
+        phReduction: "مثال: 20",
+        phOperating: "مثال: 720",
+        phFailures: "مثال: 6",
+        phRepairHours: "مثال: 48",
+
+        // Currency options
+        curEGP: "ج.م - الجنيه المصري",
+        curUSD: "USD - الدولار الأمريكي",
+        curSAR: "SAR - الريال السعودي",
+        curAED: "AED - الدرهم الإماراتي",
+        curEUR: "EUR - اليورو",
+
+        // Panels
+        inputInfo: "بيانات الإدخال",
+        outputResults: "نتائج الإخراج",
+        requiredIncluded: "الحقول المطلوبة متضمنة",
+        optional: "اختياري",
+        required: "مطلوب",
+        results: "النتائج",
+
+        // Sections/Labels
+        companyInfo: "معلومات الشركة",
+        financialData: "البيانات المالية",
+        omData: "بيانات التشغيل والصيانة",
+
+        companyNameLabel: "اسم الشركة",
+        userTitleLabel: "المسمى الوظيفي",
+        userEmailLabel: "البريد الإلكتروني",
+        currencyLabel: "العملة",
+
+        downtimeHoursLabel: "ساعات التوقف (خلال الفترة)",
+        totalCostLabel: "إجمالي تكلفة التوقف (خلال الفترة)",
+        analysisPeriodLabel: "فترة التحليل",
+        reductionTargetLabel: "الهدف لتقليل التوقف %",
+
+        operatingHoursLabel: "ساعات التشغيل خلال الفترة",
+        numFailuresLabel: "عدد الأعطال",
+        totalRepairHoursLabel: "إجمالي ساعات الإصلاح",
+
+        // Helper keywords
+        whatItIs: "ما هو:",
+        howCalc: "طريقة الحساب:",
+        example: "مثال:",
+
+        // Helper text
+        dtWhat: "إجمالي الساعات التي لم تكن فيها المعدة تعمل خلال فترة التحليل.",
+        dtHow: "اجمع مدد التوقف خلال الفترة.",
+        dtEx: "توقف يومين = 48 ساعة",
+        downtimeSmall: "أدخل 0 إذا لم يحدث توقف",
+
+        tcWhat: "إجمالي الخسارة المالية الناتجة عن التوقف خلال فترة التحليل.",
+        tcHow: "ساعات التوقف × تكلفة الساعة (بالاتفاق مع المالية).",
+        tcEx: "48 ساعة × 5,000 = 240,000",
+        requiredStrong: "مطلوب:",
+        financeConfirm: "يرجى تأكيد هذا الرقم مع الإدارة المالية",
+
+        apWhat: "نافذة الزمن المستخدمة لتحويل تكلفة التوقف إلى تأثير سنوي.",
+        apHow: "اختر أقرب فترة تقرير قياسية في موقعك.",
+        apEx: "ربع سنة = 90 يوم",
+        p30: "شهر واحد (30 يوم)",
+        p90: "ربع سنة (90 يوم)",
+        p180: "نصف سنة (180 يوم)",
+        p365: "سنة واحدة (365 يوم)",
+
+        rtWhat: "النسبة المستهدفة لتقليل التوقف .",
+        rtHow: "ضع هدف تحسين متفق عليه داخليًا.",
+        rtEx: "20",
+        optionalSmall: "اختياري",
+
+        ohWhat: "إجمالي ساعات التشغيل المخططة خلال فترة التحليل.",
+        ohHow: "ساعات/يوم × عدد أيام الفترة.",
+        ohEx: "24 × 30 = 720 ساعة",
+        ohSmall: "مطلوب لحساب مؤشرات الإتاحة والاعتمادية",
+
+        nfWhat: "عدد الأعطال غير المخططة خلال فترة التحليل.",
+        nfHow: "احسب الحوادث التي تطلبت تدخل/إصلاح.",
+        nfEx: "6 أعطال خلال الشهر",
+
+        trWhat: "إجمالي الوقت المستغرق لإصلاح الأعطال خلال الفترة.",
+        trHow: "اجمع مدد الإصلاح لكل الأعطال.",
+        trEx: "6 أعطال × 8 ساعات = 48 ساعة",
+
+        // Buttons
+        calcBtn: "إنشاء التقرير",
+        resetBtn: "إعادة ضبط الكل",
+        exportPdfBtn: "تصدير PDF",
+
+        // Placeholder
+        placeholderTitle: "ستظهر النتائج هنا",
+        placeholderText: "أكمل الحقول المطلوبة ثم اضغط ",
+        placeholderStrong: "إنشاء التقرير",
+
+        // Perspectives
+        financialPerspective: "المنظور المالي",
+        operationsPerspective: "منظور التشغيل",
+        maintenancePerspective: "منظور الصيانة",
+
+        // KPI labels
+        kpiTotalDowntimeCost: "إجمالي تكلفة التوقف",
+        kpiCostPerHour: "تكلفة ساعة التوقف",
+        kpiAnnualExposure: "التأثير المالي السنوي",
+        kpiPotentialSavings: "التوفير السنوي المحتمل",
+
+        kpiTotalDowntimeHours: "إجمالي ساعات التوقف",
+        kpiAvailability: "نسبة الإتاحة %",
+        kpiDowntimePerFailure: "متوسط التوقف لكل عطل",
+
+        kpiMTBF: "MTBF (متوسط الزمن بين الأعطال)",
+        kpiMTTR: "MTTR (متوسط زمن الإصلاح)",
+        kpiFailureRate: "معدل الأعطال",
+
+        // Output definition headings
+        outWhatItMeans: "المعنى:",
+        outFormula: "المعادلة:",
+        outWhyMatters: "لماذا مهم:",
+
+        // Output definitions
+        od1: "إجمالي الخسارة المالية بسبب التوقف خلال فترة التحليل.",
+        od2: "إجمالي تكلفة التوقف (إدخال)",
+        od3: "يوفر خط أساس واضح لقرارات التحسين.",
+
+        ch1: "تقدير التعرض المالي لكل ساعة توقف.",
+        ch2: "إجمالي تكلفة التوقف ÷ ساعات التوقف",
+        ch3: "يحدد قيمة تقليل ساعة توقف واحدة.",
+
+        ai1: "تقدير التكلفة السنوية إذا استمر نفس الاتجاه.",
+        ai2: "(إجمالي تكلفة التوقف ÷ أيام الفترة) × 365",
+        ai3: "يدعم الميزانية واحتساب العائد على الاستثمار.",
+
+        as1: "تقدير التوفير السنوي بناءً على هدف التحسين.",
+        as2: "التأثير المالي السنوي × (نسبة التحسين ÷ 100)",
+        as3: "يربط إجراءات الاعتمادية بقيمة مالية قابلة للقياس.",
+
+        op1: "إجمالي ساعات التوقف خلال فترة التحليل.",
+        op2: "ساعات التوقف (إدخال)",
+        op3: "محرك مباشر لفقد الطاقة الإنتاجية وتعطل الخدمة.",
+
+        av1: "نسبة الوقت الذي كانت فيه المعدة متاحة للتشغيل.",
+        av2: "((ساعات التشغيل − ساعات التوقف) ÷ ساعات التشغيل) × 100",
+        av3: "مؤشر أساسي للاعتمادية وتأثيره التشغيلي مباشر.",
+
+        df1: "متوسط مدة التوقف لكل حادث عطل.",
+        df2: "ساعات التوقف ÷ عدد الأعطال",
+        df3: "يفرق بين الأعطال السريعة والانقطاعات الكبيرة.",
+
+        mb1: "متوسط زمن التشغيل بين الأعطال (مؤشر اعتمادية).",
+        mb2: "ساعات التشغيل ÷ عدد الأعطال",
+        mb3: "MTBF أعلى يعني أعطال أقل واعتمادية أقوى.",
+
+        mr1: "متوسط الزمن لإعادة المعدة للعمل بعد العطل.",
+        mr2: "إجمالي ساعات الإصلاح ÷ عدد الأعطال",
+        mr3: "MTTR أقل يقلل الانقطاع والتعرض للتكلفة.",
+
+        fr1: "عدد الأعطال لكل 1,000 ساعة تشغيل.",
+        fr2: "(عدد الأعطال ÷ ساعات التشغيل) × 1000",
+        fr3: "يسمح بالمقارنة بين الأصول والمواقع.",
+
+        // Executive / Reco
+        execSummary: "الملخص التنفيذي",
+        companyOverview: "نظرة عامة على الشركة",
+        financialImpact: "الأثر المالي",
+        operationalPerformance: "الأداء التشغيلي",
+        maintenanceEfficiency: "كفاءة الصيانة",
+        targetLine: "المستهدف: ≥85% (مستوى عالمي: ≥95%)",
+
+        disclaimer: "هذه الحاسبة لا تمثل عرضًا أو ضمانًا أو التزامًا من ABB. ABB غير مسؤولة عن القرارات المبنية على مخرجات هذه الأداة. للحصول على تقييم مُعتمد، توصي ABB بمراجعة موقعية وتحقق مشترك للبيانات مع العميل.",
+
+        criticalRec: "توصيات حرجة",
+        operationalAssessment: "ماذا تشير المؤشرات",
+        financialMessage: "الرسالة المالية",
+        nextActions: "الخطوات التالية المقترحة",
+
+        fm1: "مستوى عدم الإتاحة",
+        fm2: "مرتبط بتقدير",
+        fm3: "كتعرض مالي سنوي حالي.",
+        fm4: "إذا حققت",
+        fm5: "من تقليل التوقف، فإن فرصة التوفير السنوي التقديرية هي",
+
+        ctaText: "شارك نتائجك مع ABB للحصول على خطة تحسين اعتمادية مخصصة ومتوافقة مع Power Care.",
+        ctaBtn: "استشر خبراء ABB",
+        ctaTip: "نصيحة: أضف ساعات التشغيل + الأعطال + ساعات الإصلاح لتحليل أدق.",
+
+        footerLine: "حافظ على تشغيل عملياتك بلا توقف.",
+     unitDays: "يوم",
+     unitHrs: "ساعة",
+     unitPer1000: "/1000 ساعة",
+        contactLabel: "للتواصل:",
+
+        // Executive line templates
+        exCompanyPrefix: "الشركة:",
+        exDatePrefix: "تاريخ التحليل:",
+        exPeriodPrefix: "الفترة:",
+        exTotalCostPrefix: "إجمالي التكلفة:",
+        exAnnualImpactPrefix: "الأثر السنوي:",
+        exAvailabilityPrefix: "الإتاحة:",
+        exMtbfPrefix: "MTBF:",
+        exMttrPrefix: "MTTR:",
+
+        // Runtime strings (alerts/confirm)
+        confirmReset: "هل أنت متأكد أنك تريد إعادة ضبط جميع الحقول؟",
+        alertTotalCost: "يرجى إدخال قيمة صحيحة لإجمالي تكلفة التوقف (خلال الفترة).",
+        alertPeriod: "يرجى اختيار فترة تحليل صحيحة.",
+        warnDowntimeZero: "<strong>ملاحظة تحقق:</strong> ساعات التوقف = 0 بينما إجمالي تكلفة التوقف أكبر من 0. يرجى تأكيد المدخلات.",
+        errOpLessDowntime: "<strong>خطأ بالمدخلات:</strong> ساعات التشغيل لا يمكن أن تكون أقل من ساعات التوقف.",
+        needFailuresData: "يلزم بيانات الأعطال",
+        noDowntime: "غير متاح (لا يوجد توقف)",
+        na: "غير متاح",
+        dash: "—",
+
+        // Smart recommendation texts
+        sevNoData: "أضف ساعات التشغيل (ويُفضل الأعطال + ساعات الإصلاح) للحصول على توصية اعتمادية أدق.",
+        sevCritical: "عدم الإتاحة أعلى بكثير من المستهدف. غالبًا يشير ذلك إلى أعطال متكررة، أو زمن إصلاح طويل، أو ضعف الجاهزية من حيث قطع الغيار/الاستجابة.",
+        sevHigh: "عدم الإتاحة أعلى من المستهدف. ركّز على جاهزية الاستجابة ومعالجة أسباب الأعطال الأكثر تأثيرًا لتقليل ساعات التوقف.",
+        sevModerate: "عدم الإتاحة أعلى قليلًا من المستهدف. حسّن إجراءات الوقاية وتأكد من تحسين زمن الاستجابة والإصلاح.",
+        sevGood: "الإتاحة ضمن نطاق جيد. فكر في تحسينات استباقية/تنبؤية لحماية الأداء وإطالة عمر الأصل.",
+
+        // Smart recommendation action texts
+        actMttrHigh: "حسّن زمن الاستجابة: خفّض MTTR عبر تحسين تحديد العطل، وتوفير قطع الغيار الحرجة، وتوسيع تغطية الخدمة.",
+        actMttrMed: "عزّز جاهزية الاستجابة: راجع إجراءات الإصلاح، وقطع الغيار، ومسارات التصعيد للوصول إلى أفضل مستوى ممكن لـ MTTR.",
+        actMttrGood: "حافظ على سرعة استعادة التشغيل: ثبّت استراتيجية قطع الغيار وإجراءات الاستجابة.",
+        actNeedMttr: "أدخل بيانات الأعطال وإجمالي ساعات الإصلاح لحساب MTTR وتحسين توصيات زمن الاستجابة.",
+
+        actMtbfLow: "حسّن الاعتمادية: ارفع MTBF عبر معالجة أسباب الأعطال المتكررة وتطبيق صيانة معتمدة على الحالة.",
+        actMtbfMed: "ثبّت الاعتمادية: ركّز على أكثر أسباب الأعطال تأثيرًا واحمِ المكونات الحرجة لرفع MTBF.",
+        actMtbfGood: "الاعتمادية قوية: فكر في مراقبة تنبؤية للحفاظ على الأداء.",
+        actNeedMtbf: "أدخل بيانات الأعطال لحساب MTBF وتعزيز توصيات الاعتمادية.",
+
+        actFailRateHigh: "معدل أعطال مرتفع: نفّذ مراجعة صحة الأصل وحدد الإجراءات التصحيحية حسب أكثر الأسباب تأثيرًا.",
+        actFailRateMed: "معدل أعطال متوسط: ركّز على خطط فحص استباقية وتحسينات مستهدفة.",
+        actFailRateLow: "معدل الأعطال منخفض: حافظ على الاستراتيجية الحالية وراقب الاتجاهات.",
+
+        // CTA mail
+        mailSubject: "طلب استشارة ABB Power Care",
+        mailHello: "مرحبًا فريق ABB،",
+        mailLine1: "أرغب في مراجعة نتائج التوقف لدينا ومناقشة فرص التحسين.",
+        mailCompany: "الشركة:",
+        mailMyEmail: "بريدي:",
+        mailPeriod: "فترة التحليل (بالأيام):",
+        mailDowntime: "ساعات التوقف:",
+        mailTotalCost: "إجمالي تكلفة التوقف (خلال الفترة):",
+        mailAnnual: "التعرض المالي السنوي:",
+        mailTarget: "هدف تقليل التوقف:",
+        mailThanks: "شكرًا لكم!"
+      }
+    };
+
+    // -------------------------
+    // i18n engine
+    // -------------------------
+    const LANG_KEY = 'abb_calc_lang';
+    let currentLang = localStorage.getItem(LANG_KEY) || 'en';
+
+    window.addEventListener('load', () => {
+      // Watch inputs (existing)
+      watchIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', validateRequired);
+        el.addEventListener('change', validateRequired);
+      });
+
+      // language toggle
+      const btn = document.getElementById('langToggle');
+      if (btn) {
+        btn.addEventListener('click', () => setLanguage(currentLang === 'en' ? 'ar' : 'en'));
+      }
+
+      // init language + required state + footer email
+      setLanguage(currentLang, { silent: true });
+      validateRequired();
+      document.getElementById('abbEmailText').textContent = ABB_EXPERT_EMAIL;
+    });
+
+    function t(key){
+      const dict = I18N[currentLang] || I18N.en;
+      return (dict && dict[key] !== undefined) ? dict[key] : (I18N.en[key] ?? key);
+    }
+
+    function setLanguage(lang, opts = {}) {
+      currentLang = (lang === 'ar') ? 'ar' : 'en';
+      localStorage.setItem(LANG_KEY, currentLang);
+
+      // html lang/dir
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = (currentLang === 'ar') ? 'rtl' : 'ltr';
+
+      // toggle button label: show the OTHER language
+      const btn = document.getElementById('langToggle');
+      if (btn) btn.textContent = (currentLang === 'ar') ? 'EN' : 'AR';
+
+      // apply static UI text
+      applyTranslations();
+
+      // If results are visible, refresh the dynamic labels in Exec/Reco without recalculating numbers
+      if (!opts.silent) refreshDynamicTexts();
+    }
+
+    function applyTranslations() {
+      // text nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+
+        // keep existing HTML for things that include <strong> or <br/>? Here we only set plain text
+        // so we don't break markup. All your i18n nodes are plain text nodes => safe.
+        el.textContent = val;
+      });
+
+      // placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        el.setAttribute('placeholder', t(key));
+      });
+    }
+
+    function refreshDynamicTexts() {
+      // Executive summary labels are built at calculation time.
+      // Here we just re-run fillExecutiveSummary/fillSmartRecommendations using the last stored payload.
+      if (window.__LAST_SUMMARY__) fillExecutiveSummary(window.__LAST_SUMMARY__);
+      if (window.__LAST_RECO__) fillSmartRecommendations(window.__LAST_RECO__);
+      // CTA mail can be refreshed too if we have last CTA payload
+      if (window.__LAST_CTA__) buildCtaMail(window.__LAST_CTA__);
+    }
+
+    // -------------------------
+    // Validation / Alerts
+    // -------------------------
+
+    function validateRequired() {
+  const totalCost = parseFloat(document.getElementById('totalCostInput').value);
+  const periodDays = parseFloat(document.getElementById('analysisPeriod').value);
+
+  // Company, Title, Email are OPTIONAL
+  const financialOk = Number.isFinite(totalCost) && totalCost > 0 && Number.isFinite(periodDays) && periodDays >= 1;
+  // Equipment Details are REQUIRED (without Equipment Name/Tag)
+  const equipmentType = document.getElementById('equipmentType')?.value || '';
+  const equipmentAge = document.getElementById('equipmentAge')?.value || '';
+  const environment = document.getElementById('environment')?.value || '';
+  const maintenanceLevel = document.getElementById('maintenanceLevel')?.value || '';
+  const equipmentOk = !!(equipmentType && equipmentAge && environment && maintenanceLevel);
+
+  const btn = document.getElementById('btnCalculate');
+  btn.disabled = !(financialOk && equipmentOk);
+}
+
+    function showAlerts(alerts) {
+      const box = document.getElementById('inputAlerts');
+      if (!alerts || alerts.length === 0) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
+      }
+      box.classList.remove('hidden');
+      box.innerHTML = alerts.map(a => `<div class="alert ${a.type}">${a.text}</div>`).join('');
+    }
+
+    // -------------------------
+    // Calculator core (unchanged math)
+    // -------------------------
+    
+    // Protection Levels Data
+    // EQUIPMENT BENCHMARKS (IEEE-based baselines; keys aligned with tool dropdowns)
+// Notes:
+// - Values provided by user (IEEE dataset) in f/year, hours, and % availability.
+// - To keep existing UI/logic intact, we store baselines as single-point "ranges" [baseline, baseline].
+const equipmentBenchmarks = {
+  mv_swg: { 
+    name: 'MV Switchgear (Bare Busbar)',
+    name_ar: 'لوحات جهد متوسط (قضبان مكشوفة)',
+    availability: [99.9995, 99.9995],
+    mtbf: [488209, 488209],
+    mttr: [2.27, 2.27],
+    lambda_f_per_year: 0.01794,
+    reference: 'IEEE Std 493',
+    type: 'equipment'
+  },
+  lv_swg: { 
+    name: 'LV Switchgear (Bare Busbar)',
+    name_ar: 'لوحات جهد منخفض (قضبان مكشوفة)',
+    availability: [99.9992, 99.9992],
+    mtbf: [923077, 923077],
+    mttr: [7.29, 7.29],
+    lambda_f_per_year: 0.00949,
+    reference: 'IEEE Std 493',
+    type: 'equipment'
+  },
+  mv_lv: {
+    name: 'MV + LV Combined',
+    name_ar: 'لوحات جهد متوسط + منخفض',
+    availability: [99.9987, 99.9987],
+    mtbf: [319359, 319359],
+    mttr: [3.91, 3.91],
+    lambda_f_per_year: 0.02743,
+    reference: 'IEEE Std 493 (user-provided equipment values)',
+    type: 'equipment'
+  }
+};
+
+    // INDUSTRY BENCHMARKS (for industry sectors)
+    const industryBenchmarks = {
+      general: { name: 'General', availability: [75, 85], mtbf: [3000, 6000], mttr: [2, 4], reference: 'ISO 55000', type: 'industry' },
+      oil_gas: { name: 'Oil & Gas', availability: [85, 95], mtbf: [8000, 15000], mttr: [3, 8], reference: 'OREDA, ISO 14224, API' },
+      chemical: { name: 'Chemical Processing', availability: [80, 90], mtbf: [6000, 10000], mttr: [2, 6], reference: 'ISO 14224, OREDA' },
+      manufacturing: { name: 'Manufacturing', availability: [75, 85], mtbf: [3000, 6000], mttr: [2, 4], reference: 'IFMA, ISO 55000' },
+      power: { name: 'Utilities (Power)', availability: [90, 95], mtbf: [10000, 20000], mttr: [2, 6], reference: 'NERC, IEEE' },
+      mining: { name: 'Mining', availability: [75, 85], mtbf: [4000, 8000], mttr: [4, 12], reference: 'GMSG, ISO 17359' },
+      datacenter: { name: 'Data Centers', availability: [99.5, 99.99], mtbf: [200000, 400000], mttr: [1, 4], reference: 'Uptime Institute' },
+      hotel: { name: 'Hotels & Hospitality', availability: [95, 98], mtbf: [2000, 5000], mttr: [1, 4], reference: 'IFMA, BOMA' },
+      bank: { name: 'Banks & Financial', availability: [99.9, 99.99], mtbf: [40000, 100000], mttr: [0.5, 1], reference: 'Uptime Institute, PCI-DSS' },
+      cement: { name: 'Cement', availability: [80, 95], mtbf: [200, 1000], mttr: [4, 40], reference: 'Cement Institute, FICCI' },
+      steel: { name: 'Steel', availability: [85, 92], mtbf: [3000, 8000], mttr: [4, 12], reference: 'World Steel Association' },
+      glass: { name: 'Glass', availability: [80, 90], mtbf: [2000, 5000], mttr: [3, 8], reference: 'Glass Manufacturing Standards' },
+      food: { name: 'Food & Beverage', availability: [75, 85], mtbf: [3000, 6000], mttr: [2, 4], reference: 'GFSI, ISO 22000' },
+      automotive: { name: 'Automotive', availability: [85, 90], mtbf: [5000, 8000], mttr: [1, 3], reference: 'AIAG, ISO/TS 16949' },
+      pharma: { name: 'Pharmaceutical', availability: [90, 95], mtbf: [5000, 10000], mttr: [2, 4], reference: 'FDA, GMP Guidelines' },
+      paper: { name: 'Paper & Pulp', availability: [85, 95], mtbf: [3000, 6000], mttr: [2, 6], reference: 'TAPPI Standards' },
+      petrochem: { name: 'Petrochemical', availability: [75, 80], mtbf: [6000, 10000], mttr: [4, 8], reference: 'API, ISO 14224' }
+    };
+
+    // World-class benchmarks
+    const worldClassBenchmarks = {
+      availability: { worldClass: 97, bestPractice: 93, average: 85 },
+      mtbf: { worldClass: 800, bestPractice: 500, average: 300 },
+      mttr: { worldClass: 4, bestPractice: 6, average: 12 }
+    };
+
+
+    // ==============================
+    // IEEE-style THRESHOLDS (Equipment Benchmarking)
+    // ==============================
+    // Notes:
+    // - Ratios use Plant / IEEE baseline.
+    // - IEEE baseline values are taken from the selected benchmark object:
+    //     MTBF_IEEE := bmk.mtbf[0] (lower bound of target range)
+    //     MTTR_IEEE := bmk.mttr[1] (upper bound of target range)
+    //     Ai_IEEE   := bmk.availability[1] (upper bound of target range, in %)
+    //
+    // If you prefer a different baseline (e.g., midpoint), change these 3 lines where used.
+
+    const ieeeThresholds = {
+      mtbfRatio: [
+        { test: r => r > 2.0,  status: 'Excellent', icon: '✅', bg: '#d4edda', fg: '#155724' },
+        { test: r => r >= 1.0, status: 'Acceptable', icon: '✅', bg: '#d1ecf1', fg: '#0c5460' },
+        { test: r => r >= 0.7, status: 'Warning',    icon: '⚠️', bg: '#fff3cd', fg: '#856404' },
+        { test: r => r >= 0.5, status: 'Critical',   icon: '🔴', bg: '#f8d7da', fg: '#721c24' },
+        { test: _ => true,     status: 'Severe',     icon: '🔴🔴', bg: '#f8d7da', fg: '#721c24' }
+      ],
+      mttrRatio: [
+        { test: r => r < 0.5,  status: 'Excellent', icon: '✅', bg: '#d4edda', fg: '#155724' },
+        { test: r => r <= 1.0,  status: 'Acceptable',icon: '✅', bg: '#d1ecf1', fg: '#0c5460' },
+        { test: r => r < 2.0,  status: 'Warning',   icon: '⚠️', bg: '#fff3cd', fg: '#856404' },
+        { test: r => r <= 5.0, status: 'Critical',  icon: '🔴', bg: '#f8d7da', fg: '#721c24' },
+        { test: _ => true,     status: 'Severe',    icon: '🔴🔴', bg: '#f8d7da', fg: '#721c24' }
+      ],
+      availabilityPct: [
+        { test: a => a > 99.99, status: 'Excellent',  icon: '✅', bg: '#d4edda', fg: '#155724' },
+        { test: a => a >= 99.9, status: 'Acceptable', icon: '✅', bg: '#d1ecf1', fg: '#0c5460' },
+        { test: a => a >= 99.0, status: 'Warning',    icon: '⚠️', bg: '#fff3cd', fg: '#856404' },
+        { test: a => a >= 95.0, status: 'Critical',   icon: '🔴', bg: '#f8d7da', fg: '#721c24' },
+        { test: _ => true,      status: 'Severe',     icon: '🔴🔴', bg: '#f8d7da', fg: '#721c24' }
+      ],
+      availabilityGapPct: [
+        // Gap = (Ai_IEEE - Ai_Plant) in percentage points
+        { test: g => g < 0.01, status: 'Excellent',  icon: '✅', bg: '#d4edda', fg: '#155724' },
+        { test: g => g < 0.1,  status: 'Acceptable', icon: '✅', bg: '#d1ecf1', fg: '#0c5460' },
+        { test: g => g <= 1.0,  status: 'Warning',    icon: '⚠️', bg: '#fff3cd', fg: '#856404' },
+        { test: _ => true,     status: 'Critical',   icon: '🔴', bg: '#f8d7da', fg: '#721c24' }
+      ]
+    };
+
+    function pickThreshold(list, value) {
+      for (const row of list) { if (row.test(value)) return row; }
+      return list[list.length - 1];
+    }
+
+    function setBadge(el, thresholdRow) {
+      if (!el || !thresholdRow) return;
+      el.textContent = `${thresholdRow.icon} ${thresholdRow.status}`;
+      el.style.background = thresholdRow.bg;
+      el.style.color = thresholdRow.fg;
+    }
+
+    // Function to get benchmark comparison
+    function getBenchmarkComparison(metric, value, equipmentType) {
+      const benchmark = (equipmentType && equipmentBenchmarks[equipmentType]) || (typeof industry !== 'undefined' && industryBenchmarks[industry]) || industryBenchmarks.general;
+      let status = '';
+      let color = '';
+      
+      if (metric === 'availability') {
+        if (value >= benchmark.availability[1]) {
+          status = 'Excellent';
+          color = '#28a745';
+        } else if (value >= benchmark.availability[0]) {
+          status = 'Good';
+          color = '#17a2b8';
+        } else {
+          status = 'Needs Protection';
+          color = '#dc3545';
+        }
+      } else if (metric === 'mtbf') {
+        if (value >= benchmark.mtbf[1]) {
+          status = 'Excellent';
+          color = '#28a745';
+        } else if (value >= benchmark.mtbf[0]) {
+          status = 'Good';
+          color = '#17a2b8';
+        } else {
+          status = 'Needs Protection';
+          color = '#dc3545';
+        }
+      } else if (metric === 'mttr') {
+        if (value <= benchmark.mttr[0]) {
+          status = 'Excellent';
+          color = '#28a745';
+        } else if (value <= benchmark.mttr[1]) {
+          status = 'Good';
+          color = '#17a2b8';
+        } else {
+          status = 'Needs Protection';
+          color = '#dc3545';
+        }
+      }
+      
+      return { status, color, benchmark };
+    }
+
+
+    function calculateResults() {
+
+    // REQUIRED: Company + Title + Email  
+   const companyNameRaw = (document.getElementById('companyName').value || '').trim();
+   const userTitleRaw   = (document.getElementById('userTitle').value || '').trim();
+   const userEmailRaw   = (document.getElementById('userEmail').value || '').trim();
+
+// Company, Title, Email are now OPTIONAL - no validation needed
+    // Equipment Details are REQUIRED (without Equipment Name/Tag)
+    const equipmentType = document.getElementById('equipmentType')?.value || '';
+    const equipmentAge = document.getElementById('equipmentAge')?.value || '';
+    const environment = document.getElementById('environment')?.value || '';
+    const maintenanceLevel = document.getElementById('maintenanceLevel')?.value || '';
+
+    if (!equipmentType || !equipmentAge || !environment || !maintenanceLevel) {
+      alert((typeof currentLang !== 'undefined' && currentLang === 'ar')
+        ? 'يرجى استكمال بيانات تفاصيل المعدات المطلوبة.'
+        : 'Please complete the required Equipment Details.');
+      return;
+    }
+
+
+      const downtimeHours = parseFloat(document.getElementById('downtimeHours').value) || 0;
+      const totalCostInput = parseFloat(document.getElementById('totalCostInput').value) || 0;
+
+      const periodDays = parseFloat(document.getElementById('analysisPeriod').value) || 0;
+      const reductionTarget = parseFloat(document.getElementById('reductionTarget').value) || 0;
+
+      const operatingHours = parseFloat(document.getElementById('operatingHours').value) || 0;
+      const numFailures = parseFloat(document.getElementById('numFailures').value) || 0;
+      const totalRepairHours = parseFloat(document.getElementById('totalRepairHours').value) || 0;
+
+      const currency = document.getElementById('currency').value;
+     const companyName = companyNameRaw;
+  const userEmail   = userEmailRaw;
+
+
+      if (totalCostInput <= 0) { alert(t('alertTotalCost')); return; }
+      if (periodDays < 1) { alert(t('alertPeriod')); return; }
+
+      const alerts = [];
+
+      if (downtimeHours === 0 && totalCostInput > 0) {
+        alerts.push({ type:'warn', text: t('warnDowntimeZero') });
+      }
+      if (operatingHours > 0 && operatingHours < downtimeHours) {
+        alerts.push({ type:'error', text: t('errOpLessDowntime') });
+        showAlerts(alerts);
+        return;
+      }
+
+      // Core financial
+      const totalCost = totalCostInput;
+      const costPerHour = downtimeHours > 0 ? (totalCost / downtimeHours) : 0;
+      const annualImpact = (totalCost / periodDays) * 365;
+      const annualSavings = annualImpact * (reductionTarget / 100);
+
+      // Fill financial outputs (numbers unchanged)
+      document.getElementById('totalCost').textContent = formatCurrency(totalCost, currency);
+      document.getElementById('costHour').textContent = downtimeHours > 0 ? formatCurrency(costPerHour, currency) : t('noDowntime');
+      document.getElementById('annualImpact').textContent = formatCurrency(annualImpact, currency);
+      document.getElementById('annualSavings').textContent = reductionTarget > 0 ? formatCurrency(annualSavings, currency) : t('na');
+
+      // Show blocks
+      document.getElementById('placeholderBox').classList.add('hidden');
+      document.getElementById('financialResults').classList.remove('hidden');
+
+      // Ops / Maint
+      let availability = null, unavailability = null;
+      let downtimePerFailure = null, mtbf = null, mttr = null, failureRate = null;
+
+      if (operatingHours > 0) {
+        availability = ((operatingHours - downtimeHours) / operatingHours) * 100;
+        availability = Math.max(0, Math.min(100, availability));
+        unavailability = 100 - availability;
+
+        const haveFailureData = numFailures > 0;
+
+        downtimePerFailure = haveFailureData ? (downtimeHours / numFailures) : null;
+        mtbf = haveFailureData ? (operatingHours / numFailures) : null;
+        mttr = haveFailureData ? (totalRepairHours / numFailures) : null;
+        failureRate = haveFailureData ? ((numFailures / operatingHours) * 1000) : null;
+
+        document.getElementById('opDowntime').textContent = downtimeHours.toFixed(1) + ' ' + t('unitHrs');
+        document.getElementById('availability').textContent = availability.toFixed(2) + '%';
+        document.getElementById('downtimePerFailure').textContent =
+          haveFailureData ? (downtimePerFailure.toFixed(1) + ' ' + t('unitHrs')) : t('needFailuresData');
+
+       document.getElementById('mtbf').textContent =
+         haveFailureData ? (mtbf.toFixed(1) + ' ' + t('unitHrs')) : t('needFailuresData');
+
+
+        document.getElementById('mttr').textContent =
+          haveFailureData ? (mttr.toFixed(1) + ' ' + t('unitHrs')) : t('needFailuresData');
+
+        // Benchmark comparison moved to Executive Summary only
+
+
+        document.getElementById('failureRate').textContent =
+          haveFailureData ? (failureRate.toFixed(2) + ' ' + t('unitPer1000')) : t('needFailuresData');
+
+        document.getElementById('operationResults').classList.remove('hidden');
+        document.getElementById('maintenanceResults').classList.remove('hidden');
+      } else {
+        document.getElementById('operationResults').classList.add('hidden');
+        document.getElementById('maintenanceResults').classList.add('hidden');
+      }
+
+      // Executive Summary (store payload for language switching)
+      document.getElementById('execSummary').classList.remove('hidden');
+      window.__LAST_SUMMARY__ = {
+        companyName, periodDays, currency, totalCost, annualImpact,
+        operatingHours, downtimeHours, numFailures, totalRepairHours,
+        availability, mtbf, mttr
+      };
+      fillExecutiveSummary(window.__LAST_SUMMARY__);
+
+      // Smart Recommendations (store payload for language switching)
+      document.getElementById('criticalRec').classList.remove('hidden');
+      window.__LAST_RECO__ = {
+        operatingHours,
+        availability,
+        unavailability,
+        mtbf,
+        mttr,
+        failureRate,
+        annualImpact,
+        annualSavings,
+        reductionTarget,
+        currency
+      };
+      fillSmartRecommendations(window.__LAST_RECO__);
+
+      // CTA mail (store payload for language switching)
+      window.__LAST_CTA__ = {
+        companyName,
+        userEmail,
+        periodDays,
+        downtimeHours,
+        totalCost,
+        annualImpact,
+        reductionTarget,
+        currency
+      };
+      buildCtaMail(window.__LAST_CTA__);
+
+      showAlerts(alerts);
+      document.getElementById('financialResults').scrollIntoView({ behavior:'smooth', block:'start' });
+    
+
+      // ---- Store last calculation snapshot for backend tracking
+      try {
+        window.ABB_CALC_LAST_RESULT = {
+          inputs: {
+            company_name: (document.getElementById('companyName')?.value || '').trim() || null,
+            user_title: (document.getElementById('userTitle')?.value || '').trim() || null,
+            user_email: (document.getElementById('userEmail')?.value || '').trim() || null,
+            industry: (document.getElementById('industry')?.value || null),
+            currency: currency,
+            analysis_period_days: periodDays,
+            total_downtime_cost_period: totalCostInput,
+            downtime_hours: downtimeHours,
+            operating_hours: operatingHours,
+            num_failures: numFailures,
+            total_repair_hours: totalRepairHours,
+            reduction_target_pct: reductionTarget
+          },
+          results: {
+            total_cost_period: totalCost,
+            cost_per_hour: costPerHour,
+            annual_impact: annualImpact,
+            annual_savings: annualSavings,
+            availability_pct: (availability === null ? null : availability),
+            unavailability_pct: (unavailability === null ? null : unavailability),
+            mtbf_hours: (mtbf === null ? null : mtbf),
+            mttr_hours: (mttr === null ? null : mttr),
+            downtime_per_failure_hours: (downtimePerFailure === null ? null : downtimePerFailure),
+            failure_rate_per_1000h: (failureRate === null ? null : failureRate)
+          }
+        };
+        if (window.ABB_TRACKING && typeof window.ABB_TRACKING.onCalculate === 'function') {
+          window.ABB_TRACKING.onCalculate(window.ABB_TRACKING.buildPayload());
+        }
+      } catch (e) {
+        // ignore tracking issues
+      }
+}
+
+    function fillExecutiveSummary(d) {
+      // Keep date numeric as browser default; it will remain numbers.
+      const today = new Date().toLocaleDateString();
+
+      document.getElementById('exCompanyLine').textContent = `${t('exCompanyPrefix')} ${d.companyName || t('na')}`;
+      document.getElementById('exDateLine').textContent = `${t('exDatePrefix')} ${today}`;
+      document.getElementById('exPeriodLine').textContent = `${t('exPeriodPrefix')} ${d.periodDays} ${t('unitDays')}`;
+
+      document.getElementById('exTotalCostLine').textContent = `${t('exTotalCostPrefix')} ${formatCurrency(d.totalCost, d.currency)}`;
+      document.getElementById('exAnnualImpactLine').textContent = `${t('exAnnualImpactPrefix')} ${formatCurrency(d.annualImpact, d.currency)}`;
+
+      if (d.operatingHours > 0 && d.availability !== null) {
+        document.getElementById('exAvailabilityLine').textContent = `${t('exAvailabilityPrefix')} ${d.availability.toFixed(2)}%`;
+
+        // Update Executive Summary Benchmark Badges
+        const selIndustry = document.getElementById('equipmentType').value;
+        const bmk = equipmentBenchmarks[selIndustry] || industryBenchmarks[selIndustry] || industryBenchmarks.general;
+        
+        // Availability badge in Executive Summary
+        
+        // Availability badge in Executive Summary (ABSOLUTE thresholds)
+        const exAvailBadge = document.getElementById('exAvailBenchmark');
+        if (exAvailBadge && d.availability !== null && d.availability !== undefined) {
+          const row = pickThreshold(ieeeThresholds.availabilityPct, d.availability);
+          setBadge(exAvailBadge, row);
+        }
+
+        // MTBF badge in Executive Summary (RATIO Plant / IEEE)
+        const exMtbfBadge = document.getElementById('exMtbfBenchmark');
+        if (exMtbfBadge && d.mtbf !== null && d.mtbf > 0) {
+          const mtbfIeee = (bmk && bmk.mtbf && bmk.mtbf[0]) ? bmk.mtbf[0] : null;
+          const ratio = mtbfIeee ? (d.mtbf / mtbfIeee) : null;
+          const row = (ratio !== null && Number.isFinite(ratio))
+            ? pickThreshold(ieeeThresholds.mtbfRatio, ratio)
+            : { status: 'N/A', icon: '—', bg: '#f3f4f6', fg: '#374151' };
+          setBadge(exMtbfBadge, row);
+        }
+
+        // MTTR badge in Executive Summary (RATIO Plant / IEEE)
+        const exMttrBadge = document.getElementById('exMttrBenchmark');
+        if (exMttrBadge && d.mttr !== null && d.mttr > 0) {
+          const mttrIeee = (bmk && bmk.mttr && bmk.mttr[1]) ? bmk.mttr[1] : null;
+          const ratio = mttrIeee ? (d.mttr / mttrIeee) : null;
+          const row = (ratio !== null && Number.isFinite(ratio))
+            ? pickThreshold(ieeeThresholds.mttrRatio, ratio)
+            : { status: 'N/A', icon: '—', bg: '#f3f4f6', fg: '#374151' };
+          setBadge(exMttrBadge, row);
+        }
+
+        // Availability GAP classification (IEEE Ai - Plant Ai) [not shown in UI by default]
+        // You can display it later if you add an element (e.g., id="exAvailGapBenchmark")
+        // const aiIeee = (bmk && bmk.availability && bmk.availability[1]) ? bmk.availability[1] : null;
+        // const gapPct = (aiIeee !== null && d.availability !== null) ? (aiIeee - d.availability) : null;
+        // const gapRow = (gapPct !== null && Number.isFinite(gapPct))
+        //   ? pickThreshold(ieeeThresholds.availabilityGapPct, gapPct)
+        //   : null;
+        // setBadge(document.getElementById('exAvailGapBenchmark'), gapRow);
+
+        // Update target line with equipment/industry-specific range
+
+        const exTargetEl = document.getElementById('exTargetLine');
+        if (exTargetEl) {
+          const isEquipment = equipmentBenchmarks[selIndustry] !== undefined;
+          const benchType = isEquipment ? (t('equipmentBenchmark') || '⚙️ Equipment Benchmark') : (t('industryBenchmark') || '🏭 Industry Benchmark');
+          exTargetEl.innerHTML = `
+            <strong style="color:#1e40af;">${benchType}: ${(currentLang==='ar' && bmk.name_ar) ? bmk.name_ar : bmk.name}</strong><br>
+            <span style="font-size:11px;">${t('targetRange') || 'Target Range'}: ${bmk.availability[0]}% - ${bmk.availability[1]}%</span><br>
+            <span style="font-size:10px; color:#888;">📚 ${t('reference') || 'Reference'}: ${bmk.reference}</span>
+          `;
+        }
+
+        
+        // Update Maintenance Efficiency target line with equipment/industry-specific range
+        const exMaintTargetEl = document.getElementById('exMaintTargetLine');
+        if (exMaintTargetEl) {
+          const isEquipment = equipmentBenchmarks[selIndustry] !== undefined;
+          const benchType = isEquipment ? (t('equipmentBenchmark') || '⚙️ Equipment Benchmark') : (t('industryBenchmark') || '🏭 Industry Benchmark');
+          exMaintTargetEl.innerHTML = `
+            <strong style="color:#1e40af;">${benchType}: ${(currentLang==='ar' && bmk.name_ar) ? bmk.name_ar : bmk.name}</strong><br>
+            <span style="font-size:11px;">MTBF ${t('targetRange') || 'Target'}: ${bmk.mtbf[0].toLocaleString()} - ${bmk.mtbf[1].toLocaleString()} ${t('unitHrs') || 'hrs'}</span><br>
+            <span style="font-size:11px;">MTTR ${t('targetRange') || 'Target'}: ${bmk.mttr[0]} - ${bmk.mttr[1]} ${t('unitHrs') || 'hrs'}</span><br>
+            <span style="font-size:10px; color:#888;">📚 ${t('reference') || 'Reference'}: ${bmk.reference}</span>
+          `;
+        }
+
+        // === POPULATE EMBEDDED BENCHMARK IN EXECUTIVE SUMMARY ===
+        // This section uses INDUSTRY benchmark (separate from equipment benchmark above)
+        const execBenchSection = document.getElementById('execBenchmarkSection');
+        const selectedIndustry = document.getElementById('industry').value;
+        
+        if (execBenchSection) {
+          execBenchSection.style.display = 'block';
+          
+          // Use INDUSTRY benchmark for Protection Level Comparison
+          const industryBmk = industryBenchmarks[selectedIndustry] || industryBenchmarks.general;
+          
+          // Check if industry is selected (not "general" which is the default)
+          if (!selectedIndustry || selectedIndustry === 'general') {
+            // No industry selected - show message
+            document.getElementById('execBenchmarkIndustry').textContent = '';
+            document.getElementById('execAvailValue').textContent = '—';
+            document.getElementById('execAvailRange').textContent = '—';
+            document.getElementById('execAvailStatus').textContent = '';
+            document.getElementById('execAvailStatus').style.background = '';
+            document.getElementById('execMtbfValue').textContent = '—';
+            document.getElementById('execMtbfRange').textContent = '—';
+            document.getElementById('execMtbfStatus').textContent = '';
+            document.getElementById('execMtbfStatus').style.background = '';
+            document.getElementById('execMttrValue').textContent = '—';
+            document.getElementById('execMttrRange').textContent = '—';
+            document.getElementById('execMttrStatus').textContent = '';
+            document.getElementById('execMttrStatus').style.background = '';
+            document.getElementById('execBenchmarkRef').textContent = t('selectIndustryMsg') || 'Please select an industry to show benchmark comparison';
+          } else {
+            // Industry selected - show INDUSTRY benchmark comparison
+            document.getElementById('execBenchmarkIndustry').textContent = '🏭 Industry Benchmark: ' + industryBmk.name;
+          
+            // Availability
+            document.getElementById('execAvailValue').textContent = d.availability.toFixed(2) + '%';
+            document.getElementById('execAvailRange').textContent = industryBmk.availability[0] + '% - ' + industryBmk.availability[1] + '%';
+            const execAvailSt = document.getElementById('execAvailStatus');
+            if (d.availability >= industryBmk.availability[1]) {
+              execAvailSt.textContent = '🏆 ' + (t('benchExcellent') || 'Excellent');
+              execAvailSt.style.background = '#d4edda'; execAvailSt.style.color = '#155724';
+            } else if (d.availability >= industryBmk.availability[0]) {
+              execAvailSt.textContent = '✅ ' + (t('benchGood') || 'Good');
+              execAvailSt.style.background = '#d1ecf1'; execAvailSt.style.color = '#0c5460';
+            } else {
+              execAvailSt.textContent = '⚠️ ' + (t('benchBelowAvg') || 'Needs Protection');
+              execAvailSt.style.background = '#f8d7da'; execAvailSt.style.color = '#721c24';
+            }
+          
+            // MTBF
+            if (d.mtbf !== null && d.mtbf > 0) {
+              document.getElementById('execMtbfValue').textContent = d.mtbf.toFixed(1) + ' ' + (t('unitHrs') || 'hrs');
+              document.getElementById('execMtbfRange').textContent = industryBmk.mtbf[0].toLocaleString() + ' - ' + industryBmk.mtbf[1].toLocaleString() + ' ' + (t('unitHrs') || 'hrs');
+              const execMtbfSt = document.getElementById('execMtbfStatus');
+              if (d.mtbf >= industryBmk.mtbf[1]) {
+                execMtbfSt.textContent = '🏆 ' + (t('benchExcellent') || 'Excellent');
+                execMtbfSt.style.background = '#d4edda'; execMtbfSt.style.color = '#155724';
+              } else if (d.mtbf >= industryBmk.mtbf[0]) {
+                execMtbfSt.textContent = '✅ ' + (t('benchGood') || 'Good');
+                execMtbfSt.style.background = '#d1ecf1'; execMtbfSt.style.color = '#0c5460';
+              } else {
+                execMtbfSt.textContent = '⚠️ ' + (t('benchBelowAvg') || 'Needs Protection');
+                execMtbfSt.style.background = '#f8d7da'; execMtbfSt.style.color = '#721c24';
+              }
+            } else {
+              document.getElementById('execMtbfValue').textContent = t('needFailuresData') || 'N/A';
+              document.getElementById('execMtbfRange').textContent = industryBmk.mtbf[0].toLocaleString() + ' - ' + industryBmk.mtbf[1].toLocaleString() + ' ' + (t('unitHrs') || 'hrs');
+              document.getElementById('execMtbfStatus').textContent = '';
+              document.getElementById('execMtbfStatus').style.background = '';
+            }
+          
+            // MTTR
+            if (d.mttr !== null && d.mttr > 0) {
+              document.getElementById('execMttrValue').textContent = d.mttr.toFixed(1) + ' ' + (t('unitHrs') || 'hrs');
+              document.getElementById('execMttrRange').textContent = industryBmk.mttr[0] + ' - ' + industryBmk.mttr[1] + ' ' + (t('unitHrs') || 'hrs');
+              const execMttrSt = document.getElementById('execMttrStatus');
+              if (d.mttr <= industryBmk.mttr[0]) {
+                execMttrSt.textContent = '🏆 ' + (t('benchExcellent') || 'Excellent');
+                execMttrSt.style.background = '#d4edda'; execMttrSt.style.color = '#155724';
+              } else if (d.mttr <= industryBmk.mttr[1]) {
+                execMttrSt.textContent = '✅ ' + (t('benchGood') || 'Good');
+                execMttrSt.style.background = '#d1ecf1'; execMttrSt.style.color = '#0c5460';
+              } else {
+                execMttrSt.textContent = '⚠️ ' + (t('benchBelowAvg') || 'Needs Protection');
+                execMttrSt.style.background = '#f8d7da'; execMttrSt.style.color = '#721c24';
+              }
+            } else {
+              document.getElementById('execMttrValue').textContent = t('needFailuresData') || 'N/A';
+              document.getElementById('execMttrRange').textContent = industryBmk.mttr[0] + ' - ' + industryBmk.mttr[1] + ' ' + (t('unitHrs') || 'hrs');
+              document.getElementById('execMttrStatus').textContent = '';
+              document.getElementById('execMttrStatus').style.background = '';
+            }
+          
+            // Reference
+            document.getElementById('execBenchmarkRef').textContent = industryBmk.reference;
+          }
+        }
+        // === END EMBEDDED BENCHMARK ===
+      } else {
+        document.getElementById('exAvailabilityLine').textContent = `${t('exAvailabilityPrefix')} ${t('dash')}`;
+      }
+
+
+     document.getElementById('exMtbfLine').textContent =
+        (d.mtbf !== null) ? `${t('exMtbfPrefix')} ${d.mtbf.toFixed(1)} ${t('unitHrs')}` : `${t('exMtbfPrefix')} ${t('dash')}`;
+
+     document.getElementById('exMttrLine').textContent =
+        (d.mttr !== null) ? `${t('exMttrPrefix')} ${d.mttr.toFixed(1)} ${t('unitHrs')}` : `${t('exMttrPrefix')} ${t('dash')}`;
+
+    }
+
+    function fillSmartRecommendations(d) {
+      // =====================================================
+      // STRATEGIC RECOMMENDATION ENGINE v5.0 (FIXED - NO DUPLICATES)
+      // =====================================================
+      
+      try {
+        // -----------------------------
+        // CALCULATE VALUES
+        // -----------------------------
+        var unavailability = null;
+        var availability = d.availability;
+        var operatingHours = d.operatingHours || 0;
+        
+        if (operatingHours > 0 && availability !== null && availability !== undefined) {
+          unavailability = 100 - availability;
+        }
+        
+        // -----------------------------
+        // INJECT FINANCIAL VALUES
+        // -----------------------------
+        var unavailEl = document.getElementById('recUnavailPct');
+        if (unavailEl) {
+          unavailEl.textContent = (unavailability !== null) 
+            ? unavailability.toFixed(2) + '%' 
+            : '—';
+        }
+        
+        var lossEl = document.getElementById('recAnnualLoss');
+        if (lossEl) {
+          lossEl.textContent = formatCurrency(d.annualImpact, d.currency);
+        }
+        
+        var pctEl = document.getElementById('recImprovePct');
+        if (pctEl) {
+          pctEl.textContent = (d.reductionTarget && d.reductionTarget > 0) 
+            ? d.reductionTarget.toFixed(1) + '%' 
+            : '—';
+        }
+        
+        var saveEl = document.getElementById('recAnnualSave');
+        if (saveEl) {
+          saveEl.textContent = (d.reductionTarget && d.reductionTarget > 0)
+            ? formatCurrency(d.annualSavings, d.currency)
+            : '—';
+        }
+        
+        // -----------------------------
+        // STRATEGIC NARRATIVE
+        // -----------------------------
+        var narrativeEN = '';
+        var narrativeAR = '';
+        
+        if (operatingHours <= 0 || availability === null || availability === undefined) {
+          narrativeEN = 'Add Operating Hours (and ideally Failures + Repair Hours) to receive a detailed operational protection assessment and service recommendations.';
+          narrativeAR = 'أضف ساعات التشغيل (ويُفضل الأعطال + ساعات الإصلاح) للحصول على تقييم مفصل للحماية التشغيلية وتوصيات الخدمة.';
+        }
+        else if (availability < 90) {
+          narrativeEN = 'Your operational continuity level indicates CRITICAL EXPOSURE. With ' + unavailability.toFixed(2) + '% unavailability, your current maintenance and service strategy is insufficient to protect against unplanned production losses. Immediate service intervention is recommended.';
+          narrativeAR = 'مستوى استمرارية العمليات لديك يشير إلى تعرض حرج. مع ' + unavailability.toFixed(2) + '% عدم إتاحة، استراتيجية الصيانة والخدمة الحالية غير كافية. يُوصى بتدخل خدمي فوري.';
+        }
+        else if (availability < 95) {
+          narrativeEN = 'Your operational continuity level shows ELEVATED RISK. At ' + availability.toFixed(2) + '% availability, your service protection strategy requires strengthening. Proactive service enhancements can significantly reduce your financial exposure.';
+          narrativeAR = 'مستوى استمرارية العمليات لديك يظهر مخاطر مرتفعة. عند ' + availability.toFixed(2) + '% إتاحة، استراتيجية حماية الخدمة تتطلب تعزيزًا.';
+        }
+        else if (availability < 98) {
+          narrativeEN = 'Your operational continuity is at a MANAGED RISK level (' + availability.toFixed(2) + '% availability). Your current service strategy provides reasonable protection, but there is opportunity to optimize response times.';
+          narrativeAR = 'استمرارية العمليات لديك في مستوى مخاطر مُدارة (' + availability.toFixed(2) + '% إتاحة). استراتيجية الخدمة الحالية توفر حماية معقولة.';
+        }
+        else {
+          narrativeEN = 'Your operational continuity indicates HIGH PROTECTION status (' + availability.toFixed(2) + '% availability). Your service and maintenance strategy is effectively protecting your operations.';
+          narrativeAR = 'استمرارية العمليات لديك تشير إلى حالة حماية عالية (' + availability.toFixed(2) + '% إتاحة). استراتيجية الخدمة والصيانة لديك تحمي عملياتك بشكل فعال.';
+        }
+        
+        var narrativeEl = document.getElementById('recNarrative');
+        if (narrativeEl) {
+          narrativeEl.textContent = (currentLang === 'ar') ? narrativeAR : narrativeEN;
+        }
+        
+        // -----------------------------
+        // STRATEGIC ACTIONS (5 POINTS)
+        // -----------------------------
+        var actions = [];
+        var actionsAR = [];
+
+        // Pull industry benchmark (for availability action)
+        var industryKey = (document.getElementById('industry')?.value || 'general');
+        var bmk = (typeof industryBenchmarks !== 'undefined' && industryBenchmarks[industryKey]) ? industryBenchmarks[industryKey] : null;
+        var bmkAvailLow = bmk ? bmk.availability[0] : null;
+        var bmkAvailHigh = bmk ? bmk.availability[1] : null;
+
+        // ACTION 1: Availability vs benchmark
+        if (d.availability !== null && d.availability !== undefined && operatingHours > 0) {
+          var a = d.availability;
+          if (bmkAvailLow !== null && bmkAvailHigh !== null) {
+            if (a < bmkAvailLow) {
+              actions.push('<strong>Close the Availability Gap:</strong> Your availability (' + a.toFixed(2) + '%) is below the industry target range (' + bmkAvailLow + '%–' + bmkAvailHigh + '%). Prioritize the top downtime drivers and implement a protection plan to recover lost operating time.');
+              actionsAR.push('<strong>سد فجوة الإتاحة:</strong> الإتاحة الحالية (' + a.toFixed(2) + '%) أقل من نطاق القطاع المستهدف (' + bmkAvailLow + '%–' + bmkAvailHigh + '%). ركّز على أكبر أسباب التوقف وطبّق خطة حماية لاستعادة زمن التشغيل.');
+            } else if (a <= bmkAvailHigh) {
+              actions.push('<strong>Lift Performance to World-Class:</strong> Your availability (' + a.toFixed(2) + '%) is within the industry range (' + bmkAvailLow + '%–' + bmkAvailHigh + '%). Target quick wins in response/repair and preventive actions to move toward best-in-class.');
+              actionsAR.push('<strong>رفع الأداء للمستوى العالمي:</strong> الإتاحة الحالية (' + a.toFixed(2) + '%) ضمن نطاق القطاع (' + bmkAvailLow + '%–' + bmkAvailHigh + '%). ركّز على تحسينات سريعة في الاستجابة/الإصلاح والإجراءات الوقائية للوصول للأفضل.');
+            } else {
+              actions.push('<strong>Sustain High Protection:</strong> Your availability (' + a.toFixed(2) + '%) exceeds the industry target range (' + bmkAvailLow + '%–' + bmkAvailHigh + '%). Document what works and keep governance to avoid performance drift.');
+              actionsAR.push('<strong>الحفاظ على الحماية العالية:</strong> الإتاحة الحالية (' + a.toFixed(2) + '%) أعلى من نطاق القطاع (' + bmkAvailLow + '%–' + bmkAvailHigh + '%). وثّق أفضل الممارسات وحافظ على الحوكمة لتجنب تراجع الأداء.');
+            }
+          } else {
+            actions.push('<strong>Improve Availability:</strong> Your availability is ' + a.toFixed(2) + '%. Focus on the largest downtime causes and strengthen your protection plan to reduce unplanned downtime.');
+            actionsAR.push('<strong>تحسين الإتاحة:</strong> الإتاحة الحالية ' + a.toFixed(2) + '%. ركّز على أكبر أسباب التوقف وعزّز خطة الحماية لتقليل التوقف غير المخطط.');
+          }
+        } else {
+          actions.push('<strong>Enable Operational Assessment:</strong> Add Operating Hours to unlock availability benchmarking and a clearer protection profile.');
+          actionsAR.push('<strong>تفعيل التقييم التشغيلي:</strong> أضف ساعات التشغيل لإظهار مقارنة الإتاحة ومعرفة مستوى الحماية بشكل أدق.');
+        }
+
+        // ACTION 2: MTTR-based
+        if (d.mttr !== null && d.mttr !== undefined && d.mttr > 0) {
+          if (d.mttr > 12) {
+            actions.push('<strong>Enhance Service Response Coverage:</strong> Current restoration time (' + d.mttr.toFixed(1) + ' hrs) indicates gaps in service readiness. Consider: (a) Priority response agreement, (b) Critical spares strategy, (c) Remote diagnostics.');
+            actionsAR.push('<strong>تعزيز تغطية استجابة الخدمة:</strong> وقت الاستعادة الحالي (' + d.mttr.toFixed(1) + ' ساعة) يشير إلى فجوات في جاهزية الخدمة. فكّر في: (أ) اتفاقية استجابة أولوية، (ب) استراتيجية قطع غيار حرجة، (ج) تشخيص عن بُعد.');
+          } else if (d.mttr > 6) {
+            actions.push('<strong>Improve Restoration Efficiency:</strong> MTTR (' + d.mttr.toFixed(1) + ' hrs) is acceptable but can be optimized by standard troubleshooting, spares readiness, and clearer escalation paths.');
+            actionsAR.push('<strong>تحسين كفاءة الاستعادة:</strong> MTTR (' + d.mttr.toFixed(1) + ' ساعة) مقبول لكن يمكن تحسينه بتوحيد خطوات التشخيص، جاهزية قطع الغيار، ومسارات تصعيد أوضح.');
+          } else {
+            actions.push('<strong>Maintain Fast Restoration:</strong> Your MTTR (' + d.mttr.toFixed(1) + ' hrs) reflects strong readiness. Keep the same response workflow and train teams to sustain performance.');
+            actionsAR.push('<strong>الحفاظ على الاستعادة السريعة:</strong> MTTR (' + d.mttr.toFixed(1) + ' ساعة) يعكس جاهزية قوية. حافظ على نفس آلية الاستجابة ودرّب الفرق لاستدامة الأداء.');
+          }
+        } else {
+          actions.push('<strong>Measure Restoration Capability:</strong> Add Failures + Repair Hours to calculate MTTR and assess response readiness.');
+          actionsAR.push('<strong>قياس قدرة الاستعادة:</strong> أضف الأعطال + ساعات الإصلاح لحساب MTTR وتقييم جاهزية الاستجابة.');
+        }
+
+        // ACTION 3: MTBF-based
+        if (d.mtbf !== null && d.mtbf !== undefined && d.mtbf > 0) {
+          if (d.mtbf < 200) {
+            actions.push('<strong>Stabilize Reliability:</strong> High failure frequency (MTBF: ' + d.mtbf.toFixed(0) + ' hrs) suggests gaps in preventive coverage. Prioritize top failure modes and protect critical components.');
+            actionsAR.push('<strong>استقرار الاعتمادية:</strong> تكرار الأعطال مرتفع (MTBF: ' + d.mtbf.toFixed(0) + ' ساعة). ركّز على أكثر أسباب الأعطال شيوعًا وحماية المكونات الحرجة.');
+          } else if (d.mtbf < 1000) {
+            actions.push('<strong>Optimize Preventive Strategy:</strong> MTBF (' + d.mtbf.toFixed(0) + ' hrs) is acceptable. Introduce condition-based checks and targeted upgrades to increase time between failures.');
+            actionsAR.push('<strong>تحسين الاستراتيجية الوقائية:</strong> MTBF (' + d.mtbf.toFixed(0) + ' ساعة) مقبول. أضف فحوصات قائمة على الحالة وترقيات محددة لزيادة الزمن بين الأعطال.');
+          } else {
+            actions.push('<strong>Sustain Reliability:</strong> Your MTBF (' + d.mtbf.toFixed(0) + ' hrs) indicates good failure containment. Continue your preventive program and monitor early-warning indicators.');
+            actionsAR.push('<strong>الحفاظ على الاعتمادية:</strong> MTBF (' + d.mtbf.toFixed(0) + ' ساعة) يشير لاحتواء جيد للأعطال. استمر في البرنامج الوقائي وراقب مؤشرات الإنذار المبكر.');
+          }
+        } else {
+          actions.push('<strong>Validate Failure Frequency:</strong> Add Number of Failures to calculate MTBF and benchmark reliability.');
+          actionsAR.push('<strong>تأكيد تكرار الأعطال:</strong> أضف عدد الأعطال لحساب MTBF ومقارنة الاعتمادية.');
+        }
+
+        // ACTION 4: Financial justification (always present)
+        if (d.annualImpact && d.annualImpact > 0) {
+          var savingTxtEN = (d.reductionTarget && d.reductionTarget > 0) ? (' With a ' + d.reductionTarget.toFixed(1) + '% reduction target, the estimated annual savings is ' + formatCurrency(d.annualSavings, d.currency) + '.') : '';
+          var savingTxtAR = (d.reductionTarget && d.reductionTarget > 0) ? (' ومع هدف تقليل ' + d.reductionTarget.toFixed(1) + '%، فإن التوفير السنوي التقديري هو ' + formatCurrency(d.annualSavings, d.currency) + '.') : '';
+          actions.push('<strong>Build the Business Case:</strong> Your estimated annual downtime exposure is ' + formatCurrency(d.annualImpact, d.currency) + '.' + savingTxtEN + ' Validate this baseline with Finance to prioritize protection investments.');
+          actionsAR.push('<strong>بناء جدوى الاستثمار:</strong> التعرض السنوي التقديري لتكلفة التوقف هو ' + formatCurrency(d.annualImpact, d.currency) + '.' + savingTxtAR + ' أكد هذا الرقم مع المالية لتحديد أولويات الاستثمار في الحماية.');
+        } else {
+          actions.push('<strong>Quantify Downtime Exposure:</strong> Add Total Downtime Cost for the period to calculate annual financial exposure and justify improvement investments.');
+          actionsAR.push('<strong>تحديد التعرض المالي:</strong> أضف إجمالي تكلفة التوقف خلال الفترة لحساب التعرض المالي السنوي وتبرير استثمارات التحسين.');
+        }
+
+        // ACTION 5: Next Step (Always last)
+        actions.push('<strong>Recommended Next Step:</strong> Schedule a Power Care consultation to validate this assessment on-site and define a tailored protection plan (response coverage, preventive scope, and improvement roadmap).');
+        actionsAR.push('<strong>الخطوة التالية الموصى بها:</strong> حدّد موعدًا لاستشارة Power Care للتحقق من هذا التقييم ميدانيًا ووضع خطة حماية مخصصة (تغطية الاستجابة، نطاق الوقاية، وخارطة طريق التحسين).');
+
+        // Set actions (with proper numbering)
+        var actionsEl = document.getElementById('recActions');
+        if (actionsEl) {
+          var finalActions = (currentLang === 'ar') ? actionsAR : actions;
+          actionsEl.innerHTML = finalActions.map(function(a, i) { 
+            return '<div style="margin-bottom:12px;">' + (i + 1) + '. ' + a + '</div>'; 
+          }).join('');
+        }
+        
+      } catch (error) {
+        console.error('fillSmartRecommendations error:', error);
+        var narrativeEl = document.getElementById('recNarrative');
+        if (narrativeEl) {
+          narrativeEl.textContent = 'Unable to generate recommendations. Please check input data.';
+        }
+      }
+    }
+
+        function buildCtaMail(d) {
+      const subject = encodeURIComponent(t('mailSubject'));
+      const body = encodeURIComponent(
+`${t('mailHello')}
+
+${t('mailLine1')}
+
+${t('mailCompany')} ${d.companyName}
+${t('mailMyEmail')} ${d.userEmail}
+
+${t('mailPeriod')} ${d.periodDays}
+${t('mailDowntime')} ${d.downtimeHours}
+${t('mailTotalCost')} ${formatCurrencyPlain(d.totalCost, d.currency)}
+${t('mailAnnual')} ${formatCurrencyPlain(d.annualImpact, d.currency)}
+${t('mailTarget')} ${(d.reductionTarget || 0)}%
+
+${t('mailThanks')}`
+      );
+      // CTA link is controlled by PARDOT_CTA_URL (do not override here).
+}
+
+    function resetForm() {
+      if (!confirm(t('confirmReset'))) return;
+
+      document.getElementById('companyName').value = '';
+      document.getElementById('userTitle').value = '';
+      document.getElementById('userEmail').value = '';
+document.getElementById('equipmentType').value = '';
+    document.getElementById('equipmentAge').value = '';
+    document.getElementById('environment').value = '';
+    document.getElementById('maintenanceLevel').value = '';
+      document.getElementById('currency').value = 'EGP';
+
+      document.getElementById('downtimeHours').value = '0';
+      document.getElementById('totalCostInput').value = '';
+      document.getElementById('analysisPeriod').value = '30';
+      document.getElementById('reductionTarget').value = '';
+
+      document.getElementById('operatingHours').value = '';
+      document.getElementById('numFailures').value = '0';
+      document.getElementById('totalRepairHours').value = '0';
+
+      ['totalCost','costHour','annualImpact','annualSavings','opDowntime','availability','downtimePerFailure','mtbf','mttr','failureRate']
+        .forEach(id => document.getElementById(id).textContent = t('dash'));
+
+      document.getElementById('placeholderBox').classList.remove('hidden');
+      document.getElementById('financialResults').classList.add('hidden');
+      document.getElementById('operationResults').classList.add('hidden');
+      document.getElementById('maintenanceResults').classList.add('hidden');
+
+      document.getElementById('execSummary').classList.add('hidden');
+      document.getElementById('criticalRec').classList.add('hidden');
+
+      // clear stored payloads
+      window.__LAST_SUMMARY__ = null;
+      window.__LAST_RECO__ = null;
+      window.__LAST_CTA__ = null;
+
+      showAlerts([]);
+      validateRequired();
+    }
+
+    function formatCurrency(value, currency) {
+      // Keep digits Western for both languages; localize the currency label in Arabic
+      const n = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+
+      if (currentLang === 'ar') {
+        const map = { EGP: 'ج.م', USD: 'دولار', SAR: 'ر.س', AED: 'د.إ', EUR: 'يورو' };
+        const cur = map[currency] || currency;
+        return `${cur} ${n}`;
+      }
+
+      // English (or default): keep standard currency formatting
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+function formatCurrencyPlain(value, currency) {
+      const n = Math.round(value).toString();
+      if (currentLang === 'ar') {
+        const map = { EGP: 'ج.م', USD: 'دولار', SAR: 'ر.س', AED: 'د.إ', EUR: 'يورو' };
+        const cur = map[currency] || currency;
+        return `${cur} ${n}`;
+      }
+      return `${currency} ${n}`;
+    }
+
+  const PARDOT_CTA_URL = "	https://campaign-el.abb.com/l/961032/2026-02-06/7sblf";
+
+  
+  async function exportPDF() {
+    try {
+      // ---- Lazy load PDF libraries if not loaded
+      if (!window.html2canvas || !window.jspdf || !window.jspdf.jsPDF) {
+        var btn = document.querySelector('[onclick="exportPDF()"]');
+        if (btn) { btn.textContent = 'Loading...'; btn.disabled = true; }
+        loadPdfLibs(function() {
+          if (btn) { btn.textContent = 'Export PDF'; btn.disabled = false; }
+          exportPDF(); // Retry after loading
+        });
+        return;
+      }
+
+      // ---- Confirm we have visible results
+      const visibleIds = ["financialResults","operationResults","maintenanceResults","execSummary","criticalRec"];
+      const hasResults = visibleIds.some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains("hidden");
+      });
+      if (!hasResults) {
+        alert("Please calculate results first, then export the PDF.");
+        return;
+      }
+
+      // ---- Backend tracking: PDF export intent
+      try {
+        if (window.ABB_TRACKING && typeof window.ABB_TRACKING.onPDFExport === 'function') {
+          window.ABB_TRACKING.onPDFExport(window.ABB_TRACKING.buildPayload({ stage: 'start' }));
+        }
+      } catch (e) {
+        // ignore
+      }
+
+
+      // ---- Ensure CTA points to Pardot (also helps for email)
+      const liveCta = document.getElementById("ctaMail");
+      if (liveCta) {
+        liveCta.href = PARDOT_CTA_URL;
+        liveCta.target = "_blank";
+        liveCta.rel = "noopener";
+      }
+
+      // ---- Fill report header fields (so they appear in PDF)
+      const company = document.getElementById("companyName")?.value || "N/A";
+      const title   = document.getElementById("userTitle")?.value || "N/A";
+      const email   = document.getElementById("userEmail")?.value || "N/A";
+
+      const repCompany = document.getElementById("repCompany");
+      const repContact = document.getElementById("repContact");
+      const repEmail   = document.getElementById("repEmail");
+      const repDate    = document.getElementById("repDate");
+
+      if (repCompany) repCompany.textContent = company;
+      if (repContact) repContact.textContent = title;
+      if (repEmail)   repEmail.textContent   = email;
+      if (repDate)    repDate.textContent    = new Date().toLocaleDateString();
+
+      // ---- Build an offscreen "PDF clone" (so we can change layout without touching UI)
+      const shell = document.querySelector(".shell");
+      if (!shell) {
+        alert("PDF export error: .shell not found.");
+        return;
+      }
+
+      const holder = document.createElement("div");
+      holder.style.position = "fixed";
+      holder.style.left = "-10000px";
+      holder.style.top = "0";
+      holder.style.width = "1100px";
+      holder.style.background = "#fff";
+      holder.style.zIndex = "-1";
+
+      const clone = shell.cloneNode(true);
+      clone.classList.add("pdf-mode");
+      clone.style.width = "1100px";
+      clone.style.maxWidth = "1100px";
+      clone.style.background = "#fff";
+
+      holder.appendChild(clone);
+      document.body.appendChild(holder);
+
+      // Ensure ABB Voice font is loaded before rendering to canvas
+      if (document.fonts && document.fonts.ready) {
+        try { await document.fonts.ready; } catch (e) {}
+      }
+
+      // ---- Remove elements we never want in PDF
+      clone.querySelector(".abb-header")?.remove();
+      clone.querySelector(".hero")?.remove();
+      clone.querySelector("#exportWrap")?.remove(); // delete "Export Results as PDF" from PDF
+
+      // Force single column and remove the input panel completely
+      const grid = clone.querySelector(".grid");
+      if (grid) {
+        const panels = grid.querySelectorAll(":scope > .panel");
+        if (panels.length > 1) panels[0].remove(); // remove INPUT panel
+      }
+
+      // Hide placeholder (if still present)
+      clone.querySelector("#placeholderBox")?.remove();
+
+      // Ensure report header is visible in clone
+      const repHeader = clone.querySelector("#reportHeader");
+      if (repHeader) repHeader.classList.remove("hidden");
+
+      // Ensure CTA inside clone is the Pardot URL
+      const cloneCta = clone.querySelector("#ctaMail");
+      if (cloneCta) {
+        cloneCta.href = PARDOT_CTA_URL;
+        cloneCta.target = "_blank";
+        cloneCta.rel = "noopener";
+      }
+
+      // ---- Elements to render (avoid cutting cards between pages)
+      const outPanel = clone.querySelector(".grid .panel"); // output panel after removing input panel
+      if (!outPanel) {
+        alert("PDF export error: output panel not found.");
+        document.body.removeChild(holder);
+        return;
+      }
+
+      const toRender = [];
+
+      // Panel head (Output Results header)
+      const panelHead = outPanel.querySelector(".panel-head");
+      if (panelHead) toRender.push(panelHead);
+
+      // Visible result blocks
+      ["financialResults","operationResults","maintenanceResults"].forEach(id => {
+        const el = outPanel.querySelector("#" + id);
+        if (el && !el.classList.contains("hidden")) toRender.push(el);
+      });
+
+      // Executive summary + recommendations (these live outside output panel in your layout)
+      const exec = clone.querySelector("#execSummary");
+      if (exec && !exec.classList.contains("hidden")) toRender.push(exec);
+
+      const rec = clone.querySelector("#criticalRec");
+      if (rec && !rec.classList.contains("hidden")) toRender.push(rec);
+
+      // Footer (optional)
+      const footer = clone.querySelector(".footer");
+      if (footer) toRender.push(footer);
+
+      // ---- Create PDF
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const contentW = pageW - margin * 2;
+
+      let cursorY = margin;
+
+      async function renderBlock(el) {
+        // Measure element rect (CSS px)
+        const elRect = el.getBoundingClientRect();
+
+        // Capture block
+        const canvas = await html2canvas(el, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          scrollX: 0,
+          scrollY: 0
+        });
+
+        const imgData = canvas.toDataURL("image/png", 1.0);
+        const imgH = (canvas.height * contentW) / canvas.width;
+
+        // Page break (avoid splitting blocks)
+        if (cursorY + imgH > pageH - margin) {
+          pdf.addPage();
+          cursorY = margin;
+        }
+
+        // Add image
+        pdf.addImage(imgData, "PNG", margin, cursorY, contentW, imgH);
+
+        // Add clickable link over CTA button if this block contains it
+        const a = el.querySelector("#ctaMail");
+        if (a) {
+          const aRect = a.getBoundingClientRect();
+
+          // Convert CSS px -> canvas px
+          const sx = canvas.width / elRect.width;
+          const sy = canvas.height / elRect.height;
+
+          const relLeftCanvas = (aRect.left - elRect.left) * sx;
+          const relTopCanvas  = (aRect.top  - elRect.top)  * sy;
+          const relWCanvas    = aRect.width  * sx;
+          const relHCanvas    = aRect.height * sy;
+
+          // Convert canvas px -> mm
+          const mmPerPx = contentW / canvas.width;
+
+          const linkX = margin + relLeftCanvas * mmPerPx;
+          const linkY = cursorY + relTopCanvas * mmPerPx;
+          const linkW = relWCanvas * mmPerPx;
+          const linkH = relHCanvas * mmPerPx;
+
+          pdf.link(linkX, linkY, linkW, linkH, { url: PARDOT_CTA_URL });
+        }
+
+        // Advance cursor
+        cursorY += imgH + 6;
+      }
+
+      // Render header + blocks
+      if (repHeader) {
+        // Render report header first (to appear at top)
+        await renderBlock(repHeader);
+      }
+      for (const block of toRender) {
+        await renderBlock(block);
+      }
+      // Cleanup
+      document.body.removeChild(holder);
+
+      // Save
+      const safeCompany = (company || "Report").replace(/[^\w\- ]+/g, "").trim().slice(0, 40);
+      pdf.save(`Downtime-Report-${safeCompany || "ABB"}.pdf`);
+    } catch (err) {
+      console.error(err);
+
+      try {
+        if (window.ABB_TRACKING && typeof window.ABB_TRACKING.onError === 'function') {
+          window.ABB_TRACKING.onError(window.ABB_TRACKING.buildPayload({ where: 'exportPDF', message: String(err && err.message ? err.message : err) }));
+        }
+      } catch (e) { }
+
+      alert("PDF export failed. Open DevTools Console to see the error details.");
+    }
+  }
+
+
+  // ===============================
+  // BACKEND TRACKING HOOKS (NO GA)
+  // ===============================
+  // Backend can override these methods at runtime to send events to cloud.
+  // By default, they are safe no-ops.
+
+  (function initAbbTracking(){
+    function getOrCreateSessionId() {
+      try {
+        const key = 'abb_calc_session_id';
+        let sid = sessionStorage.getItem(key);
+        if (!sid) {
+          sid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + '-' + Math.random().toString(16).slice(2);
+          sessionStorage.setItem(key, sid);
+        }
+        return sid;
+      } catch (e) {
+        return 'no-session';
+      }
+    }
+
+    function getUtmParams() {
+      const p = new URLSearchParams(window.location.search || '');
+      const keys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+      const out = {};
+      keys.forEach(k => { const v = p.get(k); if (v) out[k] = v; });
+      return out;
+    }
+
+    function baseEvent() {
+      return {
+        timestamp: new Date().toISOString(),
+        session_id: getOrCreateSessionId(),
+        page_url: window.location.href,
+        page_path: window.location.pathname,
+        referrer: document.referrer || null,
+        lang: (typeof currentLang !== 'undefined') ? currentLang : (document.documentElement.lang || 'en'),
+        dir: document.documentElement.dir || 'ltr',
+        utm: getUtmParams(),
+      };
+    }
+
+    function safeCall(fn, payload) {
+      try { if (typeof fn === 'function') fn(payload); } catch (e) { /* ignore */ }
+    }
+
+    // Expose a single object for backend integration
+    window.ABB_TRACKING = window.ABB_TRACKING || {};
+
+    // Optional generic tracker (backend can override)
+    window.ABB_TRACKING.track = window.ABB_TRACKING.track || function(event_type, data) {
+      // Default: no-op (or console log in dev)
+      // console.log('[ABB_TRACKING]', event_type, data);
+    };
+
+    // Convenience hooks (backend can override any of these)
+    window.ABB_TRACKING.onPageView = window.ABB_TRACKING.onPageView || function(data){ window.ABB_TRACKING.track('page_view', data); };
+    window.ABB_TRACKING.onCalculate = window.ABB_TRACKING.onCalculate || function(data){ window.ABB_TRACKING.track('calculate_click', data); };
+    window.ABB_TRACKING.onPDFExport = window.ABB_TRACKING.onPDFExport || function(data){ window.ABB_TRACKING.track('pdf_export', data); };
+    window.ABB_TRACKING.onConsultExpert = window.ABB_TRACKING.onConsultExpert || function(data){ window.ABB_TRACKING.track('consult_expert_click', data); };
+    window.ABB_TRACKING.onTimeMilestone = window.ABB_TRACKING.onTimeMilestone || function(data){ window.ABB_TRACKING.track('time_milestone', data); };
+    window.ABB_TRACKING.onError = window.ABB_TRACKING.onError || function(data){ window.ABB_TRACKING.track('calculator_error', data); };
+
+    // Public helper to build payload from last calculation (if available)
+    window.ABB_TRACKING.buildPayload = window.ABB_TRACKING.buildPayload || function(extra) {
+      const payload = Object.assign({}, baseEvent());
+      if (window.ABB_CALC_LAST_RESULT) payload.calculator = window.ABB_CALC_LAST_RESULT;
+      if (extra) payload.extra = extra;
+      return payload;
+    };
+
+    // Page view
+    safeCall(window.ABB_TRACKING.onPageView, window.ABB_TRACKING.buildPayload());
+
+    // Time milestones (optional)
+    [30, 60, 120].forEach(function(sec){
+      setTimeout(function(){
+        safeCall(window.ABB_TRACKING.onTimeMilestone, window.ABB_TRACKING.buildPayload({ seconds: sec }));
+      }, sec * 1000);
+    });
+
+    // CTA click
+    window.addEventListener('load', function(){
+      const cta = document.getElementById('ctaMail');
+      if (cta) {
+        cta.addEventListener('click', function(){
+          safeCall(window.ABB_TRACKING.onConsultExpert, window.ABB_TRACKING.buildPayload({ cta_url: cta.href }));
+        }, { passive: true });
+      }
+    });
+
+  })();
+</script>
+
+<noscript><img src="https://storage.abby.abb.com/akam/13/pixel_10b73099?a=dD00YmIwZTM2ZDBjYmM5NjA4OGQ4ZWZiZTQ4MmEzNDA0YTk2NGY0NWNiJmpzPW9mZg==" style="visibility: hidden; position: absolute; left: -999px; top: -999px;" /></noscript></body></html>
